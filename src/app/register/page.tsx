@@ -74,7 +74,7 @@ export default function RegisterPage() {
                       name="promoYear"
                       type="number" 
                       min="1950"
-                      max={new Date().getFullYear()}
+                      max={2030}
                       placeholder="2024"
                       required
                       className="w-full pl-12 pr-4 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all font-medium"
