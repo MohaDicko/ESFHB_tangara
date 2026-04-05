@@ -9,7 +9,12 @@ import {
 import Link from 'next/link'
 import { Suspense } from 'react'
 
-export const unstable_instant = { prefetch: 'static' }
+export const unstable_instant = { 
+  prefetch: 'static',
+  samples: [
+    { searchParams: { q: null, promo: null, status: null } }
+  ]
+}
 
 export default async function DirectoryPage({
   searchParams,

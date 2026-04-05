@@ -12,7 +12,12 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-export const unstable_instant = { prefetch: 'static' }
+export const unstable_instant = { 
+  prefetch: 'static',
+  samples: [
+    { params: { id: 'sample-id' } }
+  ]
+}
 
 export default async function AlumniProfilePage({
   params,
