@@ -11,8 +11,8 @@ export default async function Home() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-zinc-100 h-16 flex items-center px-6 md:px-12 justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
-             <Zap size={20} fill="white" />
+          <div className="h-10">
+             <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
           </div>
           <div>
             <div className="font-black tracking-tighter text-lg leading-none">ÉCOLE DE SANTÉ</div>

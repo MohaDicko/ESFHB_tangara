@@ -34,8 +34,8 @@ export default async function DashboardLayout({
       <aside className="hidden md:flex w-72 flex-col bg-white border-r border-zinc-200">
         <div className="p-8">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20 group-hover:scale-110 transition-transform">
-               <Zap size={20} fill="white" />
+            <div className="h-10">
+               <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
             </div>
             <div>
                <div className="font-black tracking-tighter text-base leading-none">ÉCOLE DE SANTÉ</div>
@@ -77,9 +77,9 @@ export default async function DashboardLayout({
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Mobile Header */}
         <header className="md:hidden h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-6">
-           <div className="flex items-center gap-2">
-              <Zap size={20} className="text-black" />
-              <span className="font-bold tracking-tighter">AlumniTracker</span>
+           <div className="flex items-center gap-3">
+              <img src="/logo.jpg" alt="ESFHB Logo" className="h-8 w-auto" />
+              <span className="font-extrabold tracking-tighter">Annuaire ESFHB</span>
            </div>
            <button className="p-2 text-zinc-500">
               <Menu size={24} />
