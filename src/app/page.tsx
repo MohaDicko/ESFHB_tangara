@@ -157,7 +157,7 @@ export default async function Home() {
            </div>
         </div>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-zinc-50 pt-8 text-zinc-400 text-xs font-bold uppercase tracking-widest">
-           <div>© {new Date().getFullYear()} Projet Souleymane Tangara.</div>
+           <div>© 2026 Projet Souleymane Tangara.</div>
            <div className="flex gap-8 mt-4 md:mt-0">
              <Link href="#" className="hover:text-black">Terms</Link>
              <Link href="#" className="hover:text-black">Privacy</Link>
