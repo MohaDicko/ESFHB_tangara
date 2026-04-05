@@ -26,7 +26,7 @@ export default async function Home() {
         </nav>
         <div className="flex items-center gap-4">
           <Link href="/login" className="hidden sm:block text-sm font-medium hover:text-black transition-colors">Connexion</Link>
-          <Link href="/register" className="bg-black text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-black/10 hover:shadow-black/20 flex items-center gap-2">
+          <Link href="/register" className="bg-gradient-to-tr from-brand to-blue-500 text-white px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand/20 hover:shadow-brand/40 flex items-center gap-2">
             Rejoindre <ArrowRight size={16} />
           </Link>
           <button className="md:hidden p-2 text-zinc-600">
@@ -43,16 +43,16 @@ export default async function Home() {
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
               Intelligence Réseau pour l'Afrique
             </div>
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.95] text-zinc-950">
-              Votre réseau <br />
-              est votre <span className="text-blue-600">valeur</span>.
+            <h1 className="text-6xl md:text-8xl font-display font-black tracking-tighter leading-[0.95] text-zinc-950">
+              Le réseau des <br />
+              <span className="text-brand underline decoration-zinc-100 decoration-8 underline-offset-8">diplômés</span>.
             </h1>
             <p className="text-lg md:text-2xl text-zinc-500 max-w-2xl font-medium leading-relaxed">
               Suivez l'insertion de vos diplômés avec une précision analytique inédite. Un outil conçu pour l'excellence et la simplicité.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-5 pt-4">
-              <Link href="/register" className="w-full sm:w-auto bg-black text-white px-10 py-5 rounded-2xl text-balance font-bold shadow-2xl shadow-black/20 hover:shadow-black/40 transition-all hover:-translate-y-2 flex items-center justify-center gap-3">
-                Lancer le système <Zap size={20} />
+              <Link href="/register" className="w-full sm:w-auto bg-gradient-to-tr from-brand to-blue-500 text-white px-10 py-5 rounded-2xl text-balance font-bold shadow-2xl shadow-brand/40 hover:shadow-brand/60 transition-all hover:-translate-y-2 flex items-center justify-center gap-3 group">
+                Lancer le système <Zap size={20} className="group-hover:scale-125 transition-transform" />
               </Link>
               <Link href="#features" className="w-full sm:w-auto px-10 py-5 rounded-2xl text-balance font-bold text-zinc-600 hover:bg-zinc-100 transition-colors border border-transparent hover:border-zinc-200">
                 En savoir plus

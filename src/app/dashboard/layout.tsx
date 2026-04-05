@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+
+export const unstable_instant = false
 import { 
   LayoutDashboard, 
   UserCircle, 

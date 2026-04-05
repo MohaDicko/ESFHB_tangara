@@ -37,9 +37,9 @@ export default function SidebarNav() {
           <Link 
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-3 px-4 py-3.5 text-sm font-bold rounded-2xl transition-all group ${
+            className={`flex items-center gap-3 px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 group ${
               isActive 
-                ? 'bg-brand text-white shadow-xl shadow-brand/10' 
+                ? 'bg-brand text-white shadow-xl shadow-brand/20 ring-4 ring-brand/5' 
                 : 'text-zinc-500 hover:bg-zinc-100 hover:text-black'
             }`}
           >

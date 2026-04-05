@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { 
-  Building2, 
   Calendar, 
   MapPin, 
   GraduationCap, 
@@ -11,29 +10,27 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
+
+export const unstable_instant = { prefetch: 'static' }
 
 export default async function AlumniProfilePage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!profile) {
     notFound()
   }
-
-  const { data: experiences } = await supabase
-    .from('experiences')
-    .select('*')
-    .eq('profile_id', params.id)
-    .order('start_date', { ascending: false })
 
   return (
     <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -83,42 +80,11 @@ export default async function AlumniProfilePage({
        </div>
 
        <div className="grid md:grid-cols-3 gap-12">
-          {/* Timeline */}
+          {/* Timeline & Experiences */}
           <div className="md:col-span-2 space-y-10">
-             <section className="space-y-8">
-                <h2 className="text-2xl font-black tracking-tight flex items-center gap-3">
-                   <Briefcase size={24} className="text-zinc-400" /> Parcours Professionnel
-                </h2>
-                <div className="relative space-y-12 before:absolute before:left-8 before:top-2 before:bottom-2 before:w-1 before:bg-brand/5">
-                   {experiences && experiences.length > 0 ? (
-                     experiences.map((exp: any) => (
-                       <div key={exp.id} className="relative pl-16 group">
-                          {/* Dot accent */}
-                          <div className="absolute left-[26px] top-1.5 w-3 h-3 bg-white border-2 border-brand rounded-full z-10 group-hover:scale-150 transition-transform shadow-sm" />
-                          
-                          <div className="p-8 bg-zinc-50 border border-zinc-100 rounded-[32px] group-hover:bg-white group-hover:border-brand/10 transition-all">
-                             <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
-                                <h3 className="text-xl font-bold text-zinc-950">{exp.job_title}</h3>
-                                <div className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5 bg-white px-3 py-1 rounded-full border border-zinc-100 shadow-sm">
-                                   <Calendar size={12} /> {new Date(exp.start_date).getFullYear()} — {exp.is_current ? 'Présent' : (exp.end_date ? new Date(exp.end_date).getFullYear() : '')}
-                                </div>
-                             </div>
-                             <p className="text-lg font-bold text-zinc-600 mb-4">{exp.company_name}</p>
-                             {exp.description && (
-                               <p className="text-zinc-500 font-medium leading-relaxed italic">
-                                  " {exp.description} "
-                               </p>
-                             )}
-                          </div>
-                       </div>
-                     ))
-                   ) : (
-                     <div className="p-10 text-center text-zinc-400 font-bold border-2 border-dashed border-zinc-100 rounded-[32px]">
-                        Aucune expérience renseignée pour le moment.
-                     </div>
-                   )}
-                </div>
-             </section>
+             <Suspense fallback={<div className="h-64 bg-zinc-100 rounded-[32px] animate-pulse" />}>
+                <ExperienceTimeline profileId={id} />
+             </Suspense>
           </div>
 
           {/* Bio / About */}
@@ -130,7 +96,6 @@ export default async function AlumniProfilePage({
                       {profile.bio || "Aucune description fournie."}
                    </p>
                 </div>
-                {/* Decorative Graduation cap */}
                 <GraduationCap size={150} className="absolute -bottom-10 -right-10 text-white/5 rotate-12 group-hover:scale-125 transition-transform duration-700" />
              </section>
 
@@ -146,6 +111,51 @@ export default async function AlumniProfilePage({
           </div>
        </div>
     </div>
+  )
+}
+
+async function ExperienceTimeline({ profileId }: { profileId: string }) {
+  const supabase = await createClient()
+  const { data: experiences } = await supabase
+    .from('experiences')
+    .select('*')
+    .eq('profile_id', profileId)
+    .order('start_date', { ascending: false })
+
+  return (
+    <section className="space-y-8">
+      <h2 className="text-2xl font-black tracking-tight flex items-center gap-3">
+        <Briefcase size={24} className="text-zinc-400" /> Parcours Professionnel
+      </h2>
+      <div className="relative space-y-12 before:absolute before:left-8 before:top-2 before:bottom-2 before:w-1 before:bg-brand/5">
+        {experiences && experiences.length > 0 ? (
+          experiences.map((exp) => (
+            <div key={exp.id} className="relative pl-16 group">
+              <div className="absolute left-[26px] top-1.5 w-3 h-3 bg-white border-2 border-brand rounded-full z-10 group-hover:scale-150 transition-transform shadow-sm" />
+              
+              <div className="p-8 bg-zinc-50 border border-zinc-100 rounded-[32px] group-hover:bg-white group-hover:border-brand/10 transition-all">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+                  <h3 className="text-xl font-bold text-zinc-950">{exp.job_title}</h3>
+                  <div className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5 bg-white px-3 py-1 rounded-full border border-zinc-100 shadow-sm">
+                    <Calendar size={12} /> {new Date(exp.start_date).getFullYear()} — {exp.is_current ? 'Présent' : (exp.end_date ? new Date(exp.end_date).getFullYear() : '')}
+                  </div>
+                </div>
+                <p className="text-lg font-bold text-zinc-600 mb-4">{exp.company_name}</p>
+                {exp.description && (
+                  <p className="text-zinc-500 font-medium leading-relaxed italic">
+                    " {exp.description} "
+                  </p>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="p-10 text-center text-zinc-400 font-bold border-2 border-dashed border-zinc-100 rounded-[32px]">
+            Aucune expérience renseignée pour le moment.
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 
