@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { ArrowRight, Users, BarChart3, Globe, ShieldCheck, Zap, Menu } from "lucide-react";
 
 // Forcing instant shell
-export const unstable_instant = { prefetch: 'static' }
+export const unstable_instant = false
 
 export default async function Home() {
   return (
