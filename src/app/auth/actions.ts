@@ -60,7 +60,7 @@ export async function signup(formData: FormData) {
 
   const { email, password, fullName, promoYear } = validation.data
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -73,11 +73,23 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
+    // Friendly French error messages
+    if (error.message.includes('rate limit')) {
+      return { error: "Trop de tentatives. Attendez quelques minutes puis réessayez." }
+    }
+    if (error.message.includes('already registered')) {
+      return { error: "Cet email est déjà utilisé. Connectez-vous à la place." }
+    }
     return { error: error.message }
   }
 
-  revalidatePath('/', 'layout')
-  // We don't redirect to dashboard directly to avoid middleware kick-back if email confirmation is required
+  // If session exists, user is auto-confirmed — redirect directly
+  if (data.session) {
+    revalidatePath('/', 'layout')
+    redirect('/dashboard')
+  }
+
+  // Otherwise, email confirmation is required
   return { success: "Inscription réussie ! Vérifiez vos emails pour confirmer votre compte." }
 }
 
