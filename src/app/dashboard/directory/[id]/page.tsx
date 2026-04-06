@@ -69,13 +69,32 @@ export default async function AlumniProfilePage({
                 {profile.status}
              </div>
           </div>
-          <div className="flex flex-col gap-3 min-w-[200px]">
-             <button className="w-full py-4 px-6 bg-brand text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:brightness-110 shadow-lg shadow-brand/20 transition-all">
-                <Mail size={18} /> Contacter par email
-             </button>
-             <button className="w-full py-4 px-6 bg-zinc-50 text-zinc-900 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-zinc-100 transition-all">
-                <Phone size={18} /> Voir le numéro
-             </button>
+          <div className="flex flex-col gap-3 min-w-[240px]">
+             {profile.is_email_public ? (
+               <a 
+                 href={`mailto:${profile.email}`}
+                 className="w-full py-4 px-6 bg-brand text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:brightness-110 shadow-lg shadow-brand/20 transition-all border border-transparent"
+               >
+                 <Mail size={18} /> Contacter par email
+               </a>
+             ) : (
+               <div className="w-full py-4 px-6 bg-zinc-50 text-zinc-400 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-not-allowed border border-zinc-100">
+                  <Mail size={18} /> Email privé
+               </div>
+             )}
+
+             {profile.is_contact_public ? (
+               <a 
+                 href={`tel:${profile.phone}`}
+                 className="w-full py-4 px-6 bg-white border border-zinc-200 text-zinc-900 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-zinc-50 transition-all"
+               >
+                 <Phone size={18} /> {profile.phone || 'Appeler'}
+               </a>
+             ) : (
+               <div className="w-full py-4 px-6 bg-zinc-50 text-zinc-400 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-not-allowed border border-zinc-100">
+                  <Phone size={18} /> Téléphone privé
+               </div>
+             )}
           </div>
        </div>
 

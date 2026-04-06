@@ -4,7 +4,9 @@ import {
   MapPin, 
   GraduationCap, 
   User,
-  ArrowRight
+  ArrowRight,
+  Mail,
+  Phone
 } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -122,6 +124,10 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
 
             <div className="flex items-center gap-6 text-zinc-400 text-sm font-bold pt-2 border-t border-zinc-50 w-full justify-center">
               <span className="flex items-center gap-1.5"><MapPin size={14} /> {person.city || 'Mali'}</span>
+              <div className="flex gap-2">
+                {person.is_email_public && <Mail size={14} className="text-brand" />}
+                {person.is_contact_public && <Phone size={14} className="text-green-500" />}
+              </div>
             </div>
 
             <Link 

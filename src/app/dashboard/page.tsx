@@ -39,6 +39,13 @@ export default async function DashboardPage() {
     value
   }))
 
+  // Fetch recent profiles
+  const { data: recentAlumni } = await supabase
+    .from('profiles')
+    .select('id, full_name, promo_year, status, avatar_url, created_at')
+    .order('created_at', { ascending: false })
+    .limit(4)
+
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-12">
       {/* Welcome Header */}
@@ -136,26 +143,34 @@ export default async function DashboardPage() {
             </div>
 
             <div className="space-y-4">
-               {[1, 2, 3].map(i => (
-                 <div key={i} className="p-6 bg-white border border-zinc-100 rounded-[28px] hover:border-zinc-200 transition-all group cursor-pointer">
+               {recentAlumni?.map((person) => (
+                 <Link 
+                   href={`/dashboard/directory/${person.id}`}
+                   key={person.id} 
+                   className="block p-6 bg-white border border-zinc-100 rounded-[28px] hover:border-brand/20 hover:shadow-xl hover:shadow-brand/5 transition-all group cursor-pointer"
+                 >
                     <div className="flex items-start gap-4">
-                       <div className="w-12 h-12 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-400">
-                          <Users size={24} />
+                       <div className="w-12 h-12 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-400 overflow-hidden border border-zinc-100">
+                          {person.avatar_url ? (
+                            <img src={person.avatar_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <Users size={24} />
+                          )}
                        </div>
                        <div className="flex-1">
                           <div className="flex justify-between items-start mb-1">
-                             <h4 className="font-bold text-zinc-900">Ancien Promo 202{i}</h4>
-                             <span className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">Aujourd'hui</span>
+                             <h4 className="font-bold text-zinc-900 group-hover:text-brand transition-colors">{person.full_name}</h4>
+                             <span className="text-[10px] font-black text-zinc-300 uppercase tracking-widest leading-none">Nouveau Membre</span>
                           </div>
-                          <p className="text-sm text-zinc-500 font-medium leading-relaxed">
-                            A rejoint une nouvelle entreprise : <span className="text-black font-bold">Tech Impact Africa</span> en tant que Manager.
+                          <p className="text-sm text-zinc-500 font-medium leading-relaxed italic">
+                            Promotion {person.promo_year} • A rejoint le réseau
                           </p>
                        </div>
-                       <div className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-2 group-hover:translate-x-0">
-                          <ArrowRight size={20} className="text-zinc-300" />
+                       <div className="opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                          <ArrowRight size={20} className="text-brand" />
                        </div>
                     </div>
-                 </div>
+                 </Link>
                ))}
             </div>
          </div>
@@ -171,9 +186,12 @@ export default async function DashboardPage() {
                   <div className="w-full bg-zinc-800 h-2 rounded-full mb-8">
                      <div className="w-2/3 h-full bg-blue-500 rounded-full" />
                   </div>
-                  <button className="w-full bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition-transform active:scale-95 leading-none">
+                  <Link 
+                    href="/dashboard/profile"
+                    className="block w-full bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition-transform active:scale-95 leading-none text-center"
+                  >
                      Compléter mon profil
-                  </button>
+                  </Link>
                </div>
                <Zap className="absolute -bottom-8 -right-8 text-white/5 w-40 h-40 group-hover:scale-110 transition-transform duration-700" />
             </div>

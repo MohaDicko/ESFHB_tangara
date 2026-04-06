@@ -12,7 +12,10 @@ const profileSchema = z.object({
   bio: z.string().max(1000).optional(),
   city: z.string().max(50).optional(),
   country: z.string().max(50).optional(),
-  status: z.enum(['En poste', 'En recherche', 'Entrepreneur', 'Étudiant'])
+  avatar_url: z.string().url().or(z.literal("")).optional(),
+  status: z.enum(['En poste', 'En recherche', 'Entrepreneur', 'Étudiant']),
+  is_email_public: z.boolean().default(false),
+  is_contact_public: z.boolean().default(false)
 })
 
 const experienceSchema = z.object({
@@ -34,7 +37,11 @@ export async function updateProfile(formData: FormData) {
   }
 
   // Security: Parse and validate data
-  const rawData = Object.fromEntries(formData.entries())
+  const rawData = {
+    ...Object.fromEntries(formData.entries()),
+    is_email_public: formData.get('is_email_public') === 'on',
+    is_contact_public: formData.get('is_contact_public') === 'on',
+  }
   const validation = profileSchema.safeParse(rawData)
 
   if (!validation.success) {

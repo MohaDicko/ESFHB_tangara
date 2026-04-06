@@ -1,22 +1,53 @@
 'use client'
 
 import { useState } from 'react'
-import { 
-  User, 
-  MapPin, 
-  Phone, 
-  GraduationCap, 
-  Save, 
-  CheckCircle2, 
-  Camera, 
-  Loader2,
-  AlertCircle
-} from 'lucide-react'
+import { Camera, Loader2, Save, CheckCircle2, AlertCircle, User, MapPin, Phone, GraduationCap } from 'lucide-react'
 import { updateProfile } from '../actions'
+import { createClient } from '@/lib/supabase/client'
+import Image from 'next/image'
 
 export default function ProfileForm({ profile }: { profile: any }) {
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '')
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  
+  const supabase = createClient()
+
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      setUploading(true)
+      const file = event.target.files?.[0]
+      if (!file) return
+
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${profile.id}/${Math.random()}.${fileExt}`
+      const filePath = `${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file)
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath)
+
+      setAvatarUrl(publicUrl)
+      
+      // Mettre à jour immédiatement en base
+      const formData = new FormData()
+      formData.append('avatar_url', publicUrl)
+      await updateProfile(formData)
+      
+      setMessage({ type: 'success', text: 'Photo de profil mise à jour !' })
+    } catch (error: any) {
+      setMessage({ type: 'error', text: 'Echec de l\'upload : ' + error.message })
+    } finally {
+      setUploading(false)
+    }
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -100,6 +131,27 @@ export default function ProfileForm({ profile }: { profile: any }) {
                 </div>
              </section>
 
+             <section className="p-8 bg-zinc-50 border border-zinc-200 rounded-[32px] space-y-6">
+                <div className="flex items-center justify-between">
+                   <div>
+                      <h4 className="font-bold text-zinc-900">Visibilité des Coordonnées</h4>
+                      <p className="text-xs text-zinc-500 font-medium">Choisissez ce que vous partagez avec le réseau.</p>
+                   </div>
+                </div>
+                <div className="space-y-4 pt-4">
+                   <PrivacyToggle 
+                      label="Afficher mon adresse email" 
+                      name="is_email_public" 
+                      defaultChecked={profile?.is_email_public} 
+                   />
+                   <PrivacyToggle 
+                      label="Afficher mon numéro de téléphone" 
+                      name="is_contact_public" 
+                      defaultChecked={profile?.is_contact_public} 
+                   />
+                </div>
+             </section>
+
              <section className="space-y-6">
                 <h3 className="text-xl font-black tracking-tight flex items-center gap-3">
                    <CheckCircle2 size={20} className="text-zinc-400" /> Bio & Résumé
@@ -113,22 +165,49 @@ export default function ProfileForm({ profile }: { profile: any }) {
              </section>
           </div>
 
-          <div className="space-y-8">
-             <div className="p-8 bg-zinc-900 rounded-[32px] text-white">
-                <h4 className="font-bold mb-4 flex items-center gap-2"><GraduationCap size={18} /> Rappel Institution</h4>
-                <p className="text-xs text-zinc-400 font-medium leading-relaxed">
-                   Votre année de promotion ({profile?.promo_year}) est renseignée lors de l'inscription et ne peut être modifiée que par l'administration.
-                </p>
-             </div>
-             
-             <button 
-               type="submit" 
-               disabled={loading}
-               className="w-full bg-black text-white py-5 rounded-[24px] font-bold flex items-center justify-center gap-2 hover:bg-zinc-800 disabled:opacity-50 transition-all shadow-xl shadow-black/10 active:scale-95"
-             >
-                {loading ? <Loader2 className="animate-spin" size={20} /> : <><Save size={20} /> Enregistrer les modifications</>}
-             </button>
-          </div>
+           <div className="space-y-8">
+              {/* Photo de Profil */}
+              <div className="p-8 bg-white border border-zinc-100 rounded-[40px] shadow-sm text-center">
+                 <div className="relative w-32 h-32 mx-auto mb-6 group">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-zinc-100 border-4 border-white shadow-xl">
+                       {avatarUrl ? (
+                         <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                       ) : (
+                         <div className="w-full h-full flex items-center justify-center text-zinc-300">
+                            <User size={48} />
+                         </div>
+                       )}
+                    </div>
+                    <label className="absolute bottom-0 right-0 p-3 bg-blue-600 text-white rounded-full cursor-pointer shadow-lg hover:scale-110 active:scale-95 transition-all">
+                       {uploading ? <Loader2 size={18} className="animate-spin" /> : <Camera size={18} />}
+                       <input 
+                         type="file" 
+                         className="hidden" 
+                         accept="image/*" 
+                         onChange={handleAvatarUpload}
+                         disabled={uploading} 
+                       />
+                    </label>
+                 </div>
+                 <h4 className="font-bold text-zinc-900">Photo de Profil</h4>
+                 <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-2">Cliquez pour changer</p>
+              </div>
+
+              <div className="p-8 bg-zinc-900 rounded-[32px] text-white">
+                 <h4 className="font-bold mb-4 flex items-center gap-2"><GraduationCap size={18} /> Rappel Institution</h4>
+                 <p className="text-xs text-zinc-400 font-medium leading-relaxed">
+                    Votre année de promotion ({profile?.promo_year}) est renseignée lors de l'inscription et ne peut être modifiée que par l'administration.
+                 </p>
+              </div>
+              
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="w-full bg-black text-white py-5 rounded-[24px] font-bold flex items-center justify-center gap-2 hover:bg-zinc-800 disabled:opacity-50 transition-all shadow-xl shadow-black/10 active:scale-95"
+              >
+                 {loading ? <Loader2 className="animate-spin" size={20} /> : <><Save size={20} /> Enregistrer les modifications</>}
+              </button>
+           </div>
        </div>
     </form>
   )
@@ -145,5 +224,19 @@ function ProfileField({ label, name, defaultValue, placeholder }: any) {
          className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl font-medium focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
        />
     </div>
+  )
+}
+
+function PrivacyToggle({ label, name, defaultChecked }: { label: string, name: string, defaultChecked: boolean }) {
+  return (
+    <label className="flex items-center justify-between p-4 bg-white border border-zinc-100 rounded-2xl cursor-pointer hover:border-blue-200 transition-colors">
+       <span className="text-sm font-bold text-zinc-700">{label}</span>
+       <input 
+         type="checkbox" 
+         name={name} 
+         defaultChecked={defaultChecked}
+         className="w-5 h-5 rounded-md border-zinc-300 text-blue-600 focus:ring-blue-500" 
+       />
+    </label>
   )
 }

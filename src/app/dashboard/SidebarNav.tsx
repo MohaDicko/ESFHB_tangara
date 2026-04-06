@@ -8,7 +8,8 @@ import {
   Briefcase, 
   Users, 
   Settings,
-  LucideIcon
+  LucideIcon,
+  ShieldCheck
 } from 'lucide-react'
 
 interface NavItem {
@@ -24,12 +25,16 @@ const navItems: NavItem[] = [
   { href: '/dashboard/directory', label: 'Annuaire', icon: Users },
 ]
 
-export default function SidebarNav() {
+export default function SidebarNav({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname()
+  
+  const finalNavItems = isAdmin 
+    ? [...navItems, { href: '/dashboard/admin', label: 'Administration', icon: ShieldCheck }]
+    : navItems
 
   return (
     <nav className="flex-1 px-4 space-y-1">
-      {navItems.map((item) => {
+      {finalNavItems.map((item) => {
         const Icon = item.icon
         const isActive = pathname === item.href
         

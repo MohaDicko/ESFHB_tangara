@@ -11,7 +11,8 @@ import {
   Settings, 
   LogOut, 
   Zap,
-  Menu
+  Menu,
+  ShieldCheck
 } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
@@ -23,6 +24,14 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  const { data: roleData } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', user?.id)
+    .single()
+    
+  const isAdmin = roleData?.role === 'admin'
 
   if (!user) {
     redirect('/login')
@@ -44,7 +53,7 @@ export default async function DashboardLayout({
           </Link>
         </div>
 
-        <SidebarNav />
+        <SidebarNav isAdmin={isAdmin} />
 
         <div className="p-4 border-t border-zinc-100">
           <nav className="space-y-1">

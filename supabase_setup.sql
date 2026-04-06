@@ -20,6 +20,9 @@ CREATE TABLE profiles (
   status TEXT DEFAULT 'En recherche', -- 'En poste', 'En recherche', 'Entrepreneur', 'Étudiant'
   avatar_url TEXT,
   bio TEXT,
+  email TEXT,
+  is_contact_public BOOLEAN DEFAULT false,
+  is_email_public BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -85,8 +88,8 @@ ON experiences FOR ALL USING (
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name, promo_year)
-  VALUES (new.id, new.raw_user_meta_data->>'full_name', (new.raw_user_meta_data->>'promo_year')::integer);
+  INSERT INTO public.profiles (id, full_name, promo_year, email)
+  VALUES (new.id, new.raw_user_meta_data->>'full_name', (new.raw_user_meta_data->>'promo_year')::integer, new.email);
   
   INSERT INTO public.user_roles (user_id, role)
   VALUES (new.id, 'alumni');
@@ -97,4 +100,31 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+  -- 5. STORAGE CONFIGURATION (AVATARS)
+-- Note: Ce bloc doit être exécuté dans l'éditeur SQL de Supabase
+
+-- Création du bucket 'avatars' s'il n'existe pas
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Politiques de sécurité pour le stockage
+-- Tout le monde peut voir les avatars (public = true)
+CREATE POLICY "Avatars sont publics" 
+ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
+
+-- Un utilisateur ne peut uploader que dans son propre dossier (nommé par son ID)
+CREATE POLICY "Les utilisateurs peuvent uploader leurs propres photos" 
+ON storage.objects FOR INSERT 
+WITH CHECK (
+  bucket_id = 'avatars' AND 
+  (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- Un utilisateur peut modifier/supprimer ses propres photos
+CREATE POLICY "Les utilisateurs gèrent leurs propres photos" 
+ON storage.objects FOR UPDATE OR DELETE 
+USING (
+  bucket_id = 'avatars' AND 
+  (storage.foldername(name))[1] = auth.uid()::text
+);
