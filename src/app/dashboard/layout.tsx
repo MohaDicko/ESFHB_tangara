@@ -2,7 +2,7 @@ import { cache } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Settings, LogOut, ArrowRight } from 'lucide-react'
+import { Settings, LogOut, ArrowRight, Zap } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
 import MobileMenu from './MobileMenu'
@@ -82,20 +82,20 @@ export default async function DashboardLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-white md:m-3 md:rounded-[48px] md:shadow-2xl md:shadow-zinc-200/50 border border-zinc-100">
         {/* Mobile Header */}
-        <header className="md:hidden h-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100/50 flex items-center justify-between px-6 sticky top-0 z-30">
-           <div className="flex items-center gap-3">
-              <div className="h-10 w-10 bg-white rounded-xl shadow-lg shadow-indigo-500/10 flex items-center justify-center border border-zinc-100 p-2">
-                 <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
-              </div>
-              <div>
-                 <div className="font-display font-black tracking-tighter text-base leading-none text-zinc-950">ESFHB</div>
-                 <div className="text-[10px] font-black text-brand tracking-widest uppercase">ALUMNI</div>
-              </div>
-           </div>
-           <MobileMenu isAdmin={isAdmin} userEmail={user.email} logoutAction={logout} />
-        </header>
+        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-xl border-b border-zinc-100 h-20 flex items-center px-6 justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 bg-brand rounded-2xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
+              <Zap size={22} fill="white" />
+            </div>
+            <div>
+              <div className="font-display font-black tracking-tighter text-lg leading-none text-zinc-900">ESFHB</div>
+              <div className="text-[9px] font-black text-brand tracking-widest uppercase mt-0.5">Tableau de bord</div>
+            </div>
+          </div>
+          <MobileMenu isAdmin={isAdmin} userEmail={user?.email} logoutAction={logout} />
+        </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto pt-20 md:pt-0">
           {children}
         </div>
       </main>

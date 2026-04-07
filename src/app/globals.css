@@ -3,9 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #0a0a0b;
-  --brand: #4f46e5;
-  --brand-hover: #4338ca;
-  --brand-soft: rgba(79, 70, 229, 0.08);
+  --brand: #2563eb;       /* Royal Blue */
+  --brand-hover: #1d4ed8;
+  --brand-soft: rgba(37, 99, 235, 0.08);
+  --medical: #10b880;     /* Medical Emerald */
 }
 
 @theme inline {
