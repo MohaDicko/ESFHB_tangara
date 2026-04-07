@@ -23,14 +23,19 @@ export default async function Home() {
           <Link href="#stats" className="hover:text-brand transition-colors">Résultats</Link>
           <Link href="#impact" className="hover:text-brand transition-colors">Impact</Link>
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 md:gap-3">
+          {/* Desktop/Tablet Buttons */}
           <div className="hidden md:flex items-center gap-2">
-             <Link href="/register" className="px-5 py-2.5 rounded-xl border border-zinc-200 text-xs font-bold text-zinc-600 hover:bg-zinc-50 transition-all">Rejoindre</Link>
+             <Link href="/register" className="px-5 py-2.5 rounded-xl border border-zinc-200 text-xs font-bold text-zinc-600 hover:bg-zinc-50 transition-all">Rejoindre le Réseau</Link>
              <Link href="/login" className="px-5 py-2.5 rounded-xl bg-brand text-white text-xs font-black uppercase tracking-widest shadow-xl shadow-brand/20 hover:brightness-110 transition-all">Accès Portail</Link>
           </div>
-          <div className="md:hidden">
-             <Link href="/login" className="px-4 py-2 bg-brand text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-brand/20 mr-1">Portail</Link>
+          
+          {/* Active Mobile Buttons (Always visible) */}
+          <div className="md:hidden flex items-center gap-1.5">
+             <Link href="/register" className="px-3 py-2 border border-zinc-100 text-[9px] font-bold text-zinc-500 rounded-lg whitespace-nowrap">S&apos;inscrire</Link>
+             <Link href="/login" className="px-3 py-2 bg-brand text-white text-[9px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-brand/20 whitespace-nowrap">Connexion</Link>
           </div>
+          
           <LandingMobileMenu />
         </div>
       </header>
