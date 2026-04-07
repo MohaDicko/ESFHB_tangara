@@ -21,24 +21,28 @@ export default function ProfileForm({ profile }: { profile: any }) {
       if (!file) return
 
       const fileExt = file.name.split('.').pop()
-      const fileName = `${profile.id}/${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
+      // Chemin plat sans sous-dossier — évite les problèmes RLS de dossier
+      const fileName = `avatar_${profile.id}_${Date.now()}.${fileExt}`
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, file)
+        .upload(fileName, file, { upsert: true })
 
       if (uploadError) throw uploadError
 
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
-        .getPublicUrl(filePath)
+        .getPublicUrl(fileName)
 
       setAvatarUrl(publicUrl)
       
-      // Mettre à jour immédiatement en base
+      // Mettre à jour en base avec les champs requis
       const formData = new FormData()
       formData.append('avatar_url', publicUrl)
+      formData.append('full_name', profile?.full_name || 'Alumni')
+      formData.append('status', profile?.status || 'En recherche')
+      if (profile?.is_email_public) formData.append('is_email_public', 'on')
+      if (profile?.is_contact_public) formData.append('is_contact_public', 'on')
       await updateProfile(formData)
       
       setMessage({ type: 'success', text: 'Photo de profil mise à jour !' })
