@@ -44,8 +44,8 @@ export default function SidebarNav({ isAdmin }: { isAdmin?: boolean }) {
             href={item.href}
             className={`flex items-center gap-3 px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 group ${
               isActive 
-                ? 'bg-brand text-white shadow-xl shadow-brand/20 ring-4 ring-brand/5' 
-                : 'text-zinc-500 hover:bg-zinc-100 hover:text-black'
+                ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 ring-4 ring-indigo-500/5' 
+                : 'text-zinc-500 hover:bg-zinc-50 hover:text-indigo-600'
             }`}
           >
             <span className={`${isActive ? 'text-white' : 'text-zinc-400 group-hover:text-black'} transition-colors`}>

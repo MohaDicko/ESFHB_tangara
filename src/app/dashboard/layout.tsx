@@ -31,13 +31,13 @@ export default async function DashboardLayout({
       {/* Sidebar - Desktop */}
       <aside className="hidden md:flex w-72 flex-col bg-white border-r border-zinc-200">
         <div className="p-8">
-          <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="h-10">
+          <Link href="/dashboard" className="flex items-center gap-3.5 group">
+            <div className="h-11 w-11 bg-white rounded-2xl shadow-xl shadow-indigo-500/10 flex items-center justify-center border border-zinc-100 p-2">
                <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
             </div>
             <div>
-               <div className="font-black tracking-tighter text-base leading-none">ÉCOLE DE SANTÉ</div>
-               <div className="text-[9px] font-black text-brand tracking-widest uppercase">F. Houphouët Boigny</div>
+               <div className="font-display font-black tracking-tighter text-base leading-none text-zinc-950">ÉCOLE DE SANTÉ</div>
+               <div className="text-[10px] font-black text-brand tracking-widest uppercase mt-0.5">F. Houphouët Boigny</div>
             </div>
           </Link>
         </div>
@@ -64,32 +64,28 @@ export default async function DashboardLayout({
             </form>
           </nav>
           
-          <div className="mt-6 px-4 py-4 bg-zinc-900 rounded-3xl text-white">
-             <div className="text-[10px] font-black text-zinc-500 tracking-widest uppercase mb-2">Connecté en tant que</div>
-             <div className="text-sm font-bold truncate">{user.email}</div>
-          </div>
-
           <Link 
             href="https://sahelmultiservice.com" 
             target="_blank" 
-            className="mt-6 flex flex-col items-center gap-1 group"
+            className="mt-8 flex flex-col items-center gap-2 group relative py-4 px-2 rounded-[32px] hover:bg-zinc-50 transition-all duration-500"
           >
-            <div className="text-[9px] font-black text-zinc-300 tracking-widest uppercase">Développé par</div>
-            <div className="flex items-center gap-1 text-[11px] font-black text-zinc-900 group-hover:text-brand transition-colors">
+            <div className="text-[10px] font-black text-zinc-300 tracking-[0.2em] uppercase">Built with Excellence</div>
+            <div className="flex items-center gap-2 text-[11px] font-black text-zinc-900 group-hover:text-indigo-600 transition-colors">
+               <div className="w-5 h-5 bg-zinc-950 rounded-lg flex items-center justify-center text-[8px] text-white font-black group-hover:bg-indigo-600 transition-colors">SM</div>
                SAHEL MULTISERVICE
-               <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+               <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
             </div>
           </Link>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden">
+      <main className="flex-1 flex flex-col h-full overflow-hidden bg-white md:m-3 md:rounded-[48px] md:shadow-2xl md:shadow-zinc-200/50 border border-zinc-100">
         {/* Mobile Header */}
-        <header className="md:hidden h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-6">
+        <header className="md:hidden h-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100 flex items-center justify-between px-6 sticky top-0 z-30">
            <div className="flex items-center gap-3">
-              <img src="/logo.jpg" alt="ESFHB Logo" className="h-8 w-auto" />
-              <span className="font-extrabold tracking-tighter">Annuaire ESFHB</span>
+              <img src="/logo.jpg" alt="ESFHB Logo" className="h-9 w-auto" />
+              <span className="font-display font-black tracking-tighter text-lg">Alumni ESFHB</span>
            </div>
            <MobileMenu isAdmin={isAdmin} userEmail={user.email} logoutAction={logout} />
         </header>

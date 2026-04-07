@@ -13,7 +13,7 @@ import {
   Cell
 } from 'recharts'
 
-const COLORS = ['#0056b3', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#8b5cf6', '#f43f5e']
 
 export function EmploymentChart({ data }: { data: any[] }) {
   const chartData = data.length > 0 ? data : [
@@ -76,9 +76,9 @@ export function SectorChart({ data }: { data: any[] }) {
           />
           <Bar 
             dataKey="value" 
-            fill="#0056b3" 
-            radius={[8, 8, 0, 0]} 
-            barSize={40} 
+            fill="#4f46e5" 
+            radius={[12, 12, 0, 0]} 
+            barSize={44} 
           />
         </BarChart>
       </ResponsiveContainer>
