@@ -18,12 +18,19 @@ export default async function Home() {
             <div className="text-[8px] md:text-[9px] font-black text-brand tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Portail des Alumni</div>
           </div>
         </div>
-        <nav className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-600">
+        <nav className="hidden lg:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-600">
           <Link href="#features" className="hover:text-brand transition-colors">Savoir-faire</Link>
           <Link href="#stats" className="hover:text-brand transition-colors">Résultats</Link>
           <Link href="#impact" className="hover:text-brand transition-colors">Impact</Link>
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+             <Link href="/register" className="px-5 py-2.5 rounded-xl border border-zinc-200 text-xs font-bold text-zinc-600 hover:bg-zinc-50 transition-all">Rejoindre</Link>
+             <Link href="/login" className="px-5 py-2.5 rounded-xl bg-brand text-white text-xs font-black uppercase tracking-widest shadow-xl shadow-brand/20 hover:brightness-110 transition-all">Accès Portail</Link>
+          </div>
+          <div className="md:hidden">
+             <Link href="/login" className="px-4 py-2 bg-brand text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-brand/20 mr-1">Portail</Link>
+          </div>
           <LandingMobileMenu />
         </div>
       </header>
