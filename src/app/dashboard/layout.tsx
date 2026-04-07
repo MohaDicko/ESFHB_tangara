@@ -2,7 +2,7 @@ import { cache } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Settings, LogOut } from 'lucide-react'
+import { Settings, LogOut, ArrowRight } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
 import MobileMenu from './MobileMenu'
@@ -68,6 +68,18 @@ export default async function DashboardLayout({
              <div className="text-[10px] font-black text-zinc-500 tracking-widest uppercase mb-2">Connecté en tant que</div>
              <div className="text-sm font-bold truncate">{user.email}</div>
           </div>
+
+          <Link 
+            href="https://sahelmultiservice.com" 
+            target="_blank" 
+            className="mt-6 flex flex-col items-center gap-1 group"
+          >
+            <div className="text-[9px] font-black text-zinc-300 tracking-widest uppercase">Développé par</div>
+            <div className="flex items-center gap-1 text-[11px] font-black text-zinc-900 group-hover:text-brand transition-colors">
+               SAHEL MULTISERVICE
+               <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
         </div>
       </aside>
 

@@ -156,11 +156,19 @@ export default async function Home() {
               </ul>
            </div>
         </div>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-zinc-50 pt-8 text-zinc-400 text-xs font-bold uppercase tracking-widest">
-           <div>© 2026 Projet Souleymane Tangara.</div>
-           <div className="flex gap-8 mt-4 md:mt-0">
-             <Link href="#" className="hover:text-black">Terms</Link>
-             <Link href="#" className="hover:text-black">Privacy</Link>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-zinc-50 pt-8 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em]">
+           <div className="flex flex-col md:flex-row items-center gap-4">
+              <span>© 2026 Projet Souleymane Tangara.</span>
+              <span className="hidden md:block text-zinc-200">|</span>
+              <Link href="https://sahelmultiservice.com" target="_blank" className="text-zinc-500 hover:text-brand transition-all flex items-center gap-1.5 group">
+                 Développé par 
+                 <span className="text-zinc-900 font-black group-hover:text-brand transition-colors">Sahel Multiservice</span>
+                 <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+           </div>
+           <div className="flex gap-8 mt-6 md:mt-0">
+             <Link href="#" className="hover:text-black transition-colors">Terms</Link>
+             <Link href="#" className="hover:text-black transition-colors">Privacy</Link>
            </div>
         </div>
       </footer>
