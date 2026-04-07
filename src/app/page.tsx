@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Users, BarChart3, Globe, ShieldCheck, Zap, Menu } from "lucide-react";
+import { ArrowRight, Users, BarChart3, Globe, ShieldCheck, Zap } from "lucide-react";
+import LandingMobileMenu from "./LandingMobileMenu";
 
 // Forcing instant shell
 export const unstable_instant = false
@@ -29,9 +30,7 @@ export default async function Home() {
           <Link href="/register" className="bg-gradient-to-tr from-brand to-blue-500 text-white px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand/20 hover:shadow-brand/40 flex items-center gap-2">
             Rejoindre <ArrowRight size={16} />
           </Link>
-          <button className="md:hidden p-2 text-zinc-600">
-            <Menu size={24} />
-          </button>
+          <LandingMobileMenu />
         </div>
       </header>
 

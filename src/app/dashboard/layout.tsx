@@ -27,7 +27,7 @@ export default async function DashboardLayout({
   if (!user) redirect('/login')
 
   return (
-    <div className="flex h-screen bg-zinc-50 selection:bg-black selection:text-white">
+    <div className="flex h-screen h-[100dvh] bg-zinc-50 selection:bg-black selection:text-white">
       {/* Sidebar - Desktop */}
       <aside className="hidden md:flex w-72 flex-col bg-white border-r border-zinc-200">
         <div className="p-8">
@@ -82,10 +82,15 @@ export default async function DashboardLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-white md:m-3 md:rounded-[48px] md:shadow-2xl md:shadow-zinc-200/50 border border-zinc-100">
         {/* Mobile Header */}
-        <header className="md:hidden h-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100 flex items-center justify-between px-6 sticky top-0 z-30">
+        <header className="md:hidden h-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100/50 flex items-center justify-between px-6 sticky top-0 z-30">
            <div className="flex items-center gap-3">
-              <img src="/logo.jpg" alt="ESFHB Logo" className="h-9 w-auto" />
-              <span className="font-display font-black tracking-tighter text-lg">Alumni ESFHB</span>
+              <div className="h-10 w-10 bg-white rounded-xl shadow-lg shadow-indigo-500/10 flex items-center justify-center border border-zinc-100 p-2">
+                 <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
+              </div>
+              <div>
+                 <div className="font-display font-black tracking-tighter text-base leading-none text-zinc-950">ESFHB</div>
+                 <div className="text-[10px] font-black text-brand tracking-widest uppercase">ALUMNI</div>
+              </div>
            </div>
            <MobileMenu isAdmin={isAdmin} userEmail={user.email} logoutAction={logout} />
         </header>
