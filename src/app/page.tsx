@@ -26,8 +26,8 @@ export default async function Home() {
         <div className="flex items-center gap-1.5 md:gap-3">
           {/* Desktop/Tablet Buttons */}
           <div className="hidden md:flex items-center gap-2">
-             <Link href="/register" className="px-5 py-2.5 rounded-xl border border-zinc-200 text-xs font-bold text-zinc-600 hover:bg-zinc-50 transition-all">Rejoindre le Réseau</Link>
-             <Link href="/login" className="px-5 py-2.5 rounded-xl bg-brand text-white text-xs font-black uppercase tracking-widest shadow-xl shadow-brand/20 hover:brightness-110 transition-all">Accès Portail</Link>
+             <Link href="/register" className="px-5 py-2.5 rounded-xl border border-zinc-200 text-xs font-bold text-zinc-600 hover:bg-zinc-50 transition-all uppercase tracking-widest">S&apos;inscrire</Link>
+             <Link href="/login" className="px-5 py-2.5 rounded-xl bg-brand text-white text-xs font-black uppercase tracking-widest shadow-xl shadow-brand/20 hover:brightness-110 transition-all">Connexion</Link>
           </div>
           
           {/* Active Mobile Buttons (Always visible) */}
