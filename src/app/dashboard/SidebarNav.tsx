@@ -1,60 +1,106 @@
 'use client'
 
+import { 
+  Users, 
+  LayoutDashboard, 
+  ShieldCheck, 
+  Settings, 
+  LogOut,
+  Zap,
+  Briefcase
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  LayoutDashboard, 
-  UserCircle, 
-  Briefcase, 
-  Users, 
-  Settings,
-  LucideIcon,
-  ShieldCheck
-} from 'lucide-react'
 
-interface NavItem {
-  href: string
-  label: string
-  icon: LucideIcon
-}
-
-const navItems: NavItem[] = [
-  { href: '/dashboard', label: "Vue d'ensemble", icon: LayoutDashboard },
-  { href: '/dashboard/profile', label: 'Mon Profil', icon: UserCircle },
+const navItems = [
+  { href: '/dashboard', label: 'Accueil', icon: LayoutDashboard },
   { href: '/dashboard/experiences', label: 'Mes Expériences', icon: Briefcase },
   { href: '/dashboard/directory', label: 'Annuaire', icon: Users },
 ]
 
-export default function SidebarNav({ isAdmin }: { isAdmin?: boolean }) {
+export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, logout?: any }) {
   const pathname = usePathname()
   
-  const finalNavItems = isAdmin 
-    ? [...navItems, { href: '/dashboard/admin', label: 'Administration', icon: ShieldCheck }]
-    : navItems
-
   return (
-    <nav className="flex-1 px-4 space-y-1">
-      {finalNavItems.map((item) => {
-        const Icon = item.icon
-        const isActive = pathname === item.href
-        
-        return (
-          <Link 
-            key={item.href}
-            href={item.href}
-            className={`flex items-center gap-3 px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 group ${
-              isActive 
-                ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 ring-4 ring-indigo-500/5' 
-                : 'text-zinc-500 hover:bg-zinc-50 hover:text-indigo-600'
-            }`}
-          >
-            <span className={`${isActive ? 'text-white' : 'text-zinc-400 group-hover:text-black'} transition-colors`}>
-              <Icon size={20} />
-            </span>
-            {item.label}
-          </Link>
-        )
-      })}
-    </nav>
+    <aside className="hidden md:flex w-80 flex-col bg-zinc-950 text-white relative overflow-hidden h-full">
+      {/* Decorative background element */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+      
+      {/* Logo Section */}
+      <div className="p-10 relative z-10">
+        <div className="flex items-center gap-4 mb-2">
+           <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-600/20 p-2">
+              <Zap size={24} className="text-blue-600" fill="currentColor" />
+           </div>
+           <div>
+             <div className="font-display font-black tracking-tighter text-2xl leading-none uppercase">ESFHB</div>
+             <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] uppercase mt-1">Alumni Network</div>
+           </div>
+        </div>
+      </div>
+
+      {/* Main Nav */}
+      <nav className="flex-1 px-6 space-y-2 relative z-10">
+        <div className="text-[11px] font-black text-zinc-600 tracking-[0.2em] uppercase mb-6 pl-4">Menu Principal</div>
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const isActive = pathname === item.href
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-bold transition-all duration-300 group ${
+                isActive
+                  ? 'bg-blue-600 text-white shadow-2xl shadow-blue-600/20'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Icon size={20} className={`${isActive ? 'text-white' : 'text-zinc-500 group-hover:text-blue-400'} transition-colors`} />
+              {item.label}
+              {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-sm" />}
+            </Link>
+          )
+        })}
+
+        {isAdmin && (
+          <div className="pt-10">
+            <div className="text-[11px] font-black text-zinc-600 tracking-[0.2em] uppercase mb-6 pl-4">Administration</div>
+            <Link
+              href="/dashboard/admin"
+              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-bold transition-all duration-300 group ${
+                pathname === '/dashboard/admin'
+                  ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-500/20'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <ShieldCheck size={20} className={pathname === '/dashboard/admin' ? 'text-white' : 'text-zinc-500 group-hover:text-emerald-400'} />
+              Gestion Membres
+            </Link>
+          </div>
+        )}
+      </nav>
+
+      {/* Footer Nav */}
+      <div className="p-8 border-t border-white/5 relative z-10">
+        <div className="space-y-1">
+           <Link
+             href="/dashboard/settings"
+             className="flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-bold text-zinc-500 hover:text-white hover:bg-white/5 transition-all group"
+           >
+             <Settings size={20} className="group-hover:rotate-45 transition-transform duration-500" />
+             Paramètres
+           </Link>
+           <form action={logout}>
+             <button
+               type="submit"
+               className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-bold text-red-500 hover:bg-red-500/10 transition-all group"
+             >
+               <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+               Déconnexion
+             </button>
+           </form>
+        </div>
+      </div>
+    </aside>
   )
 }

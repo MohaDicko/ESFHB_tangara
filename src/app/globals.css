@@ -17,6 +17,20 @@
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-soft: var(--brand-soft);
+  --color-medical: var(--medical);
+  
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+  --shadow-brand: 0 10px 30px -10px rgba(37, 99, 235, 0.25);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.medical-gradient {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--medical) 100%);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -120,48 +120,56 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer className="py-20 border-t border-zinc-100 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-20 text-center md:text-left">
-           <div className="col-span-2">
-              <div className="flex items-center gap-3 mb-6 justify-center md:justify-start">
-                <Zap size={24} className="text-brand" />
+      <footer className="py-24 border-t border-zinc-100 px-6 md:px-12 bg-white relative overflow-hidden">
+        {/* Subtle deco */}
+        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-brand/5 rounded-full blur-[100px]" />
+        
+        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16 mb-24 relative z-10">
+           <div className="col-span-2 space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 bg-brand rounded-2xl flex items-center justify-center text-white shadow-xl shadow-brand/20">
+                   <Zap size={26} fill="white" />
+                </div>
                 <div>
-                   <div className="font-black tracking-tighter text-lg leading-none">ÉCOLE DE SANTÉ</div>
-                   <div className="text-[10px] font-black text-brand tracking-widest uppercase">Félix Houphouët Boigny</div>
+                   <div className="font-display font-black tracking-tighter text-2xl leading-none text-zinc-950">ESFHB</div>
+                   <div className="text-[10px] font-black text-brand tracking-[0.2em] uppercase mt-1">Félix Houphouët Boigny</div>
                 </div>
               </div>
-              <p className="text-zinc-500 max-w-sm font-medium">La plateforme officielle de suivi et d'insertion professionnelle pour les diplômés de l'ESFé Mali.</p>
+              <p className="text-zinc-500 max-w-sm font-medium leading-relaxed">
+                 L&apos;institution de référence pour la formation des professionnels de santé d&apos;excellence. Un réseau uni pour le futur de la médecine.
+              </p>
            </div>
            <div>
-              <h4 className="font-bold mb-4">Produit</h4>
-              <ul className="space-y-3 text-zinc-400 text-sm font-medium">
-                 <li><Link href="#">Features</Link></li>
-                 <li><Link href="#">Security</Link></li>
-                 <li><Link href="#">Roadmap</Link></li>
+              <h4 className="text-xs font-black text-zinc-400 tracking-[0.2em] uppercase mb-8">Plateforme</h4>
+              <ul className="space-y-4 text-zinc-600 text-sm font-bold">
+                 <li><Link href="#features" className="hover:text-brand transition-colors">Savoir-faire</Link></li>
+                 <li><Link href="#stats" className="hover:text-brand transition-colors">Analytiques</Link></li>
+                 <li><Link href="/register" className="text-brand">Rejoindre</Link></li>
               </ul>
            </div>
            <div>
-              <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-3 text-zinc-400 text-sm font-medium">
-                 <li><Link href="#">Contact</Link></li>
-                 <li><Link href="#">Help Center</Link></li>
-                 <li><Link href="#">Legal</Link></li>
+              <h4 className="text-xs font-black text-zinc-400 tracking-[0.2em] uppercase mb-8">L&apos;institution</h4>
+              <ul className="space-y-4 text-zinc-600 text-sm font-bold">
+                 <li><Link href="#" className="hover:text-brand transition-colors">L&apos;école</Link></li>
+                 <li><Link href="#" className="hover:text-brand transition-colors">Actualités</Link></li>
+                 <li><Link href="#" className="hover:text-brand transition-colors">Contact</Link></li>
               </ul>
            </div>
         </div>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-zinc-50 pt-8 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em]">
-           <div className="flex flex-col md:flex-row items-center gap-4">
-              <span>© 2026 Projet Souleymane Tangara.</span>
+        
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-zinc-100 pt-10 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em]">
+           <div className="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
+              <span>© {new Date().getFullYear()} École de Santé F.H.B.</span>
               <span className="hidden md:block text-zinc-200">|</span>
-              <Link href="https://sahelmultiservice.com" target="_blank" className="text-zinc-500 hover:text-brand transition-all flex items-center gap-1.5 group">
-                 Développé par 
+              <Link href="https://sahelmultiservice.com" target="_blank" className="flex items-center gap-2 group">
+                 Propulsé par 
                  <span className="text-zinc-900 font-black group-hover:text-brand transition-colors">Sahel Multiservice</span>
                  <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
               </Link>
            </div>
-           <div className="flex gap-8 mt-6 md:mt-0">
-             <Link href="#" className="hover:text-black transition-colors">Terms</Link>
-             <Link href="#" className="hover:text-black transition-colors">Privacy</Link>
+           <div className="flex gap-8 mt-8 md:mt-0">
+             <Link href="#" className="hover:text-black transition-colors">Conditions</Link>
+             <Link href="#" className="hover:text-black transition-colors">Confidentialité</Link>
            </div>
         </div>
       </footer>

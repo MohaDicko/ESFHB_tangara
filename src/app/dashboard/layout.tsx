@@ -6,6 +6,7 @@ import { Settings, LogOut, ArrowRight, Zap } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
 import MobileMenu from './MobileMenu'
+import BottomNav from './BottomNav'
 
 // Cache les requêtes Supabase pour toute la durée d'un rendu
 const getSessionData = cache(async () => {
@@ -95,9 +96,12 @@ export default async function DashboardLayout({
           <MobileMenu isAdmin={isAdmin} userEmail={user?.email} logoutAction={logout} />
         </div>
 
-        <div className="flex-1 overflow-y-auto pt-20 md:pt-0">
+        <div className="flex-1 overflow-y-auto pt-20 pb-24 md:pt-0 md:pb-0">
           {children}
         </div>
+
+        {/* Mobile Tab Bar */}
+        <BottomNav />
       </main>
     </div>
   )
