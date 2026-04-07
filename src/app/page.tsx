@@ -18,7 +18,7 @@ export default async function Home() {
             <div className="text-[9px] font-black text-brand tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Portail des Alumni</div>
           </div>
         </div>
-        <nav className="hidden md:flex items-center gap-10 text-sm font-bold uppercase tracking-widest text-zinc-400">
+        <nav className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-600">
           <Link href="#features" className="hover:text-brand transition-colors">Savoir-faire</Link>
           <Link href="#stats" className="hover:text-brand transition-colors">Résultats</Link>
           <Link href="#impact" className="hover:text-brand transition-colors">Impact</Link>
@@ -131,11 +131,11 @@ export default async function Home() {
                    <Zap size={26} fill="white" />
                 </div>
                 <div>
-                   <div className="font-display font-black tracking-tighter text-2xl leading-none text-zinc-950">ESFHB</div>
+                   <div className="font-display font-black tracking-tighter text-2xl leading-none text-zinc-900">ESFHB</div>
                    <div className="text-[10px] font-black text-brand tracking-[0.2em] uppercase mt-1">Félix Houphouët Boigny</div>
                 </div>
               </div>
-              <p className="text-zinc-500 max-w-sm font-medium leading-relaxed">
+              <p className="text-zinc-600 max-w-sm font-medium leading-relaxed">
                  L&apos;institution de référence pour la formation des professionnels de santé d&apos;excellence. Un réseau uni pour le futur de la médecine.
               </p>
            </div>

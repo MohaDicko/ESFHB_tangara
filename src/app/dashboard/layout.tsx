@@ -82,15 +82,15 @@ export default async function DashboardLayout({
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-white md:m-3 md:rounded-[48px] md:shadow-2xl md:shadow-zinc-200/50 border border-zinc-100">
-        {/* Mobile Header */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-xl border-b border-zinc-100 h-20 flex items-center px-6 justify-between">
+        {/* Mobile Header - Native Style */}
+        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-zinc-100 h-16 flex items-center px-6 justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 bg-brand rounded-2xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
-              <Zap size={22} fill="white" />
+            <div className="h-9 w-9 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
+              <Zap size={18} fill="white" />
             </div>
             <div>
-              <div className="font-display font-black tracking-tighter text-lg leading-none text-zinc-900">ESFHB</div>
-              <div className="text-[9px] font-black text-brand tracking-widest uppercase mt-0.5">Tableau de bord</div>
+              <div className="font-display font-black tracking-tighter text-base leading-none text-zinc-950 uppercase">ESFHB</div>
+              <div className="text-[8px] font-black text-brand tracking-[0.2em] uppercase mt-0.5">Alumni Med</div>
             </div>
           </div>
           <MobileMenu isAdmin={isAdmin} userEmail={user?.email} logoutAction={logout} />

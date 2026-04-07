@@ -41,7 +41,7 @@ export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, log
 
       {/* Main Nav */}
       <nav className="flex-1 px-6 space-y-2 relative z-10">
-        <div className="text-[11px] font-black text-zinc-600 tracking-[0.2em] uppercase mb-6 pl-4">Menu Principal</div>
+        <div className="text-[11px] font-black text-zinc-400 tracking-[0.2em] uppercase mb-6 pl-4">Menu Principal</div>
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href
@@ -49,13 +49,13 @@ export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, log
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-bold transition-all duration-300 group ${
+              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-black transition-all duration-300 group ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-2xl shadow-blue-600/20'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  ? 'bg-brand text-white shadow-2xl shadow-brand/40'
+                  : 'text-zinc-200 hover:text-white hover:bg-white/10'
               }`}
             >
-              <Icon size={20} className={`${isActive ? 'text-white' : 'text-zinc-500 group-hover:text-blue-400'} transition-colors`} />
+              <Icon size={22} className={`${isActive ? 'text-white' : 'text-zinc-500 group-hover:text-brand'} transition-colors`} />
               {item.label}
               {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-sm" />}
             </Link>
@@ -64,16 +64,16 @@ export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, log
 
         {isAdmin && (
           <div className="pt-10">
-            <div className="text-[11px] font-black text-zinc-600 tracking-[0.2em] uppercase mb-6 pl-4">Administration</div>
+            <div className="text-[11px] font-black text-zinc-400 tracking-[0.2em] uppercase mb-6 pl-4">Administration</div>
             <Link
               href="/dashboard/admin"
-              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-bold transition-all duration-300 group ${
+              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-black transition-all duration-300 group ${
                 pathname === '/dashboard/admin'
-                  ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-500/20'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-500/30'
+                  : 'text-zinc-200 hover:text-white hover:bg-white/10'
               }`}
             >
-              <ShieldCheck size={20} className={pathname === '/dashboard/admin' ? 'text-white' : 'text-zinc-500 group-hover:text-emerald-400'} />
+              <ShieldCheck size={22} className={pathname === '/dashboard/admin' ? 'text-white' : 'text-zinc-500 group-hover:text-emerald-400'} />
               Gestion Membres
             </Link>
           </div>
