@@ -1,41 +1,29 @@
-export const unstable_instant = false
-
+import { cache } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { 
-  LayoutDashboard, 
-  UserCircle, 
-  Briefcase, 
-  Users, 
-  Settings, 
-  LogOut, 
-  Zap,
-  Menu,
-  ShieldCheck
-} from 'lucide-react'
+import { Settings, LogOut, Menu } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
+
+// Cache les requêtes Supabase pour toute la durée d'un rendu
+const getSessionData = cache(async () => {
+  const supabase = await createClient()
+  const [{ data: { user } }, { data: roleData }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from('user_roles').select('role').single()
+  ])
+  return { user, isAdmin: roleData?.role === 'admin' }
+})
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { user, isAdmin } = await getSessionData()
 
-  const { data: roleData } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', user?.id)
-    .single()
-    
-  const isAdmin = roleData?.role === 'admin'
-
-  if (!user) {
-    redirect('/login')
-  }
+  if (!user) redirect('/login')
 
   return (
     <div className="flex h-screen bg-zinc-50 selection:bg-black selection:text-white">
