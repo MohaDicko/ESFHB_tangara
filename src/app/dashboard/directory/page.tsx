@@ -45,7 +45,8 @@ async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string,
   const promoYears = Array.from({ length: 20 }, (_, i) => 2024 - i)
 
   return (
-    <form className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-[32px] border border-zinc-100 shadow-sm">
+    <form action="/dashboard/directory" method="GET" className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-[32px] border border-zinc-100 shadow-sm">
+      <input type="hidden" name="page" value="1" />
       <div className="flex-1 relative">
         <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
         <input 
@@ -80,16 +81,20 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
 
   const supabase = await createClient()
 
+  // ⚠️ Ordre important: filtres D'ABORD, range ENSUITE
   let query = supabase
     .from('profiles')
     .select('id, full_name, promo_year, specialty, city, is_email_public, is_contact_public, avatar_url, status', { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range(from, to)
+    .order('promo_year', { ascending: false })
 
-  if (q) query = query.ilike('full_name', `%${q}%`)
-  if (promo) query = query.eq('promo_year', parseInt(promo))
+  if (q && q.trim()) query = query.ilike('full_name', `%${q.trim()}%`)
+  if (promo && promo !== '') query = query.eq('promo_year', parseInt(promo))
+
+  // Range APRÈS les filtres
+  query = query.range(from, to)
 
   const { data: alumni, count } = await query
+
   const totalPages = Math.ceil((count || 0) / PAGE_SIZE)
 
   if (!alumni || alumni.length === 0) {
