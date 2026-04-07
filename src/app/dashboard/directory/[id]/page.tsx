@@ -24,7 +24,7 @@ export default async function AlumniProfilePage({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, full_name, promo_year, specialty, phone, city, country, status, avatar_url, bio, email, is_email_public, is_contact_public')
     .eq('id', id)
     .single()
 
