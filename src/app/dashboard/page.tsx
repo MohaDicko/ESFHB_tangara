@@ -23,28 +23,32 @@ export default async function DashboardPage() {
     .eq('id', user?.id)
     .single()
 
-  // Business Logic: Fetch Aggregate Data for Charts
-  const { data: allProfiles } = await supabase
-    .from('profiles')
-    .select('status')
+  // Requêtes parallèles optimisées
+  const [
+    { count: totalCount },
+    { data: recentAlumni },
+    { data: statusFallback }
+  ] = await Promise.all([
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles')
+      .select('id, full_name, promo_year, status, avatar_url, created_at')
+      .order('created_at', { ascending: false })
+      .limit(4),
+    supabase.from('profiles').select('status')
+  ])
 
-  const statusCounts = (allProfiles || []).reduce((acc: any, curr: any) => {
-    const status = curr.status || 'En recherche'
-    acc[status] = (acc[status] || 0) + 1
+  const statusCounts = (statusFallback || []).reduce((acc: Record<string, number>, curr: { status: string }) => {
+    const s = curr.status || 'En recherche'
+    acc[s] = (acc[s] || 0) + 1
     return acc
   }, {})
 
-  const chartData = Object.entries(statusCounts).map(([name, value]) => ({
-    name,
-    value
-  }))
+  const chartData = Object.entries(statusCounts).map(([name, value]) => ({ name, value }))
 
-  // Fetch recent profiles
-  const { data: recentAlumni } = await supabase
-    .from('profiles')
-    .select('id, full_name, promo_year, status, avatar_url, created_at')
-    .order('created_at', { ascending: false })
-    .limit(4)
+  const insertionRate = totalCount 
+    ? Math.round(((statusCounts['En poste'] || 0) + (statusCounts['Entrepreneur'] || 0)) / totalCount * 100)
+    : 0
+
 
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-12">
