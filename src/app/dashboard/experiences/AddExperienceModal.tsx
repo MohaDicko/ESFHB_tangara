@@ -124,20 +124,20 @@ export default function AddExperienceModal() {
                />
             </div>
 
-            <div className="p-8 bg-zinc-50 border-t border-zinc-100 flex gap-4">
+            <div className="p-8 bg-zinc-50 border-t border-zinc-100 flex flex-col sm:flex-row gap-4">
                <button 
                  type="button"
                  onClick={() => setIsOpen(false)}
-                 className="flex-1 px-6 py-4 rounded-2xl border-2 border-zinc-200 font-bold text-zinc-500 hover:bg-white transition-all"
+                 className="flex-1 px-6 py-4 rounded-2xl border-2 border-zinc-200 font-bold text-zinc-500 hover:bg-white transition-all w-full sm:w-auto"
                >
                   Annuler
                </button>
                <button 
                  type="submit"
                  disabled={loading}
-                 className="flex-[2] bg-black text-white px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-zinc-800 disabled:opacity-50 transition-all shadow-xl shadow-black/10"
+                 className="flex-[2] bg-black text-white px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-zinc-800 disabled:opacity-50 transition-all shadow-xl shadow-black/10 w-full sm:w-auto"
                >
-                  {loading ? <Loader2 className="animate-spin" size={20} /> : <><Save size={20} /> Enregistrer l'expérience</>}
+                  {loading ? <Loader2 className="animate-spin" size={20} /> : <><Save size={20} /> Enregistrer</>}
                </button>
             </div>
          </form>

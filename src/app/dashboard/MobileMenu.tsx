@@ -81,7 +81,7 @@ export default function MobileMenu({ isAdmin, userEmail, logoutAction }: Props) 
            </button>
         </div>
 
-        <div className="flex-1 p-8 space-y-12">
+        <div className="flex-1 p-8 space-y-12 overflow-y-auto">
            {/* Profile Card */}
            <div className="flex flex-col items-center text-center space-y-4">
               <div className="h-24 w-24 rounded-[32px] bg-brand/5 text-brand flex items-center justify-center text-3xl font-black border-4 border-white shadow-2xl shadow-brand/10">

@@ -67,7 +67,7 @@ export default async function AlumniProfilePage({
                 {profile.status}
              </div>
           </div>
-          <div className="flex flex-col gap-3 min-w-[240px]">
+          <div className="flex flex-col gap-3 w-full md:w-auto md:min-w-[240px]">
              {profile.is_email_public ? (
                <a 
                  href={`mailto:${profile.email}`}
