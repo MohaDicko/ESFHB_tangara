@@ -25,11 +25,7 @@ export default async function Home() {
           <Link href="#stats" className="text-zinc-500 hover:text-black transition-colors">Statistiques</Link>
           <Link href="#impact" className="text-zinc-500 hover:text-black transition-colors">Impact</Link>
         </nav>
-        <div className="flex items-center gap-4">
-          <Link href="/login" className="hidden sm:block text-sm font-medium hover:text-black transition-colors">Connexion</Link>
-          <Link href="/register" className="bg-gradient-to-tr from-brand to-blue-500 text-white px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand/20 hover:shadow-brand/40 flex items-center gap-2">
-            Rejoindre <ArrowRight size={16} />
-          </Link>
+        <div className="flex items-center gap-2">
           <LandingMobileMenu />
         </div>
       </header>
