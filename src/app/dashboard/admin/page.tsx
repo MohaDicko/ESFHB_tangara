@@ -8,13 +8,25 @@ import {
   Search,
   MoreVertical,
   Mail,
-  Filter
+  Filter,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import Link from 'next/link'
 
 export const unstable_instant = false
+const PAGE_SIZE = 20
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string, page?: string }>
+}) {
+  const { q, page } = await searchParams
+  const currentPage = Math.max(1, parseInt(page || '1'))
+  const from = (currentPage - 1) * PAGE_SIZE
+  const to = from + PAGE_SIZE - 1
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -41,11 +53,19 @@ export default async function AdminDashboardPage() {
     .select('*', { count: 'exact', head: true })
     .eq('status', 'En poste')
 
-  // Fetch all profiles for the management table
-  const { data: alumni } = await supabase
+  // Fetch all profiles for the management table (paginated & filtered)
+  let query = supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
+
+  if (q && q.trim()) query = query.ilike('full_name', `%${q.trim()}%`)
+
+  query = query.range(from, to)
+
+  const { data: alumni, count: membersCount } = await query
+  const totalPages = Math.ceil((membersCount || 0) / PAGE_SIZE)
+
 
   const placementRate = totalAlumni ? Math.round((enPoste || 0) / totalAlumni * 100) : 0
 
@@ -93,21 +113,27 @@ export default async function AdminDashboardPage() {
 
       {/* Members Table */}
       <div className="bg-white border border-zinc-100 rounded-[48px] overflow-hidden shadow-sm">
-        <div className="p-8 border-b border-zinc-50 flex flex-col md:flex-row justify-between gap-6">
-          <h2 className="text-2xl font-black tracking-tight">Gestion des Membres</h2>
-          <div className="flex gap-4">
-            <div className="relative flex-1 md:w-64">
+        <div className="p-8 border-b border-zinc-50 flex flex-col md:flex-row justify-between gap-6 items-center">
+          <div>
+            <h2 className="text-2xl font-black tracking-tight">Gestion des Membres</h2>
+            <p className="text-sm text-zinc-500 font-bold">{membersCount || 0} membres trouvés</p>
+          </div>
+          <form action="/dashboard/admin" method="GET" className="flex gap-4 w-full md:w-auto">
+            <input type="hidden" name="page" value="1" />
+            <div className="relative flex-1 md:w-64 flex">
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input 
+                name="q"
+                defaultValue={q}
                 type="text" 
                 placeholder="Chercher un nom..." 
                 className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-xl text-sm font-medium focus:ring-2 focus:ring-black/5 outline-none"
               />
             </div>
-            <button className="p-3 bg-zinc-50 rounded-xl text-zinc-500 hover:bg-zinc-100 transition-colors">
-              <Filter size={18} />
+            <button type="submit" className="px-6 py-3 bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors shrink-0">
+              Chercher
             </button>
-          </div>
+          </form>
         </div>
 
         <div className="overflow-x-auto">
@@ -166,13 +192,49 @@ export default async function AdminDashboardPage() {
           </table>
         </div>
 
-        <div className="p-8 border-t border-zinc-50 bg-zinc-50/30">
-          <div className="flex items-center justify-center gap-2">
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-black text-white text-xs font-bold">1</button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-zinc-200 text-zinc-500 text-xs font-bold hover:bg-zinc-100 transition-colors">2</button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-zinc-200 text-zinc-500 text-xs font-bold hover:bg-zinc-100 transition-colors">3</button>
+        {totalPages > 1 && (
+          <div className="p-8 border-t border-zinc-50 bg-zinc-50/30 flex items-center justify-center gap-3">
+            {currentPage > 1 && (
+              <Link 
+                href={`/dashboard/admin?q=${q || ''}&page=${currentPage - 1}`}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-zinc-200 text-zinc-500 hover:text-black transition-colors"
+                title="Page précédente"
+              >
+                <ChevronLeft size={18} />
+              </Link>
+            )}
+            
+            <div className="flex gap-2">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                const p = Math.max(1, Math.min(currentPage - 2, totalPages - 4)) + i
+                return (
+                  <Link
+                    key={p}
+                    href={`/dashboard/admin?q=${q || ''}&page=${p}`}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center transition-all ${
+                      p === currentPage 
+                        ? 'bg-black text-white shadow-lg shadow-black/10' 
+                        : 'bg-white border border-zinc-200 text-zinc-500 hover:border-black/20'
+                    }`}
+                  >
+                    {p}
+                  </Link>
+                )
+              })}
+            </div>
+
+            {currentPage < totalPages && (
+              <Link 
+                href={`/dashboard/admin?q=${q || ''}&page=${currentPage + 1}`}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-zinc-200 text-zinc-500 hover:text-black transition-colors"
+                title="Page suivante"
+              >
+                <ChevronRight size={18} />
+              </Link>
+            )}
           </div>
-        </div>
+        )}
+
       </div>
     </div>
   )
