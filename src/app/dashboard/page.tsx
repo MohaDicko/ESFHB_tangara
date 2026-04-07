@@ -13,31 +13,31 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { EmploymentChart, SectorChart } from './DashboardCharts'
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   return (
-    <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-12">
-      <Suspense fallback={<DashboardHeaderSkeleton />}>
-        <DashboardHeader />
-      </Suspense>
+    <Suspense fallback={<KpiSkeleton />}>
+       <DashboardView />
+    </Suspense>
+  )
+}
 
-      <Suspense fallback={<KpiSkeleton />}>
-        <KpiSection />
-      </Suspense>
+async function DashboardView() {
+  return (
+    <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-12">
+      <DashboardHeader />
+
+      <KpiSection />
 
       <div className="grid lg:grid-cols-2 gap-8">
-        <Suspense fallback={<ChartSkeleton />}>
-          <StatusChartSection />
-        </Suspense>
-        <Suspense fallback={<ChartSkeleton />}>
-          <SectorChartSection />
-        </Suspense>
+        <StatusChartSection />
+        <SectorChartSection />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-12">
          <div className="lg:col-span-2">
-            <Suspense fallback={<ActivitySkeleton />}>
-              <ActivitySection />
-            </Suspense>
+            <ActivitySection />
          </div>
          <SidebarWidgets />
       </div>

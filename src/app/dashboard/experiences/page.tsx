@@ -4,6 +4,8 @@ import { Suspense } from 'react'
 import AddExperienceModal from './AddExperienceModal'
 import ExperienceItem from './ExperienceItem'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ExperiencesPage() {
   return (
     <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24">

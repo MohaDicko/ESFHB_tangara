@@ -12,7 +12,6 @@ import {
 import Link from 'next/link'
 import MemberActionsMenu from './MemberActionsMenu'
 
-export const unstable_instant = false
 const PAGE_SIZE = 20
 
 export default async function AdminDashboardPage({

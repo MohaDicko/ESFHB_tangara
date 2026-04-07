@@ -3,8 +3,6 @@ import { Suspense } from "react";
 import { ArrowRight, Users, BarChart3, Globe, ShieldCheck, Zap } from "lucide-react";
 import LandingMobileMenu from "./LandingMobileMenu";
 
-// Forcing instant shell
-export const unstable_instant = false
 
 export default async function Home() {
   return (

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
-
+export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 24
 
 export default async function DirectoryPage({
@@ -22,20 +22,23 @@ export default async function DirectoryPage({
   searchParams: Promise<{ q?: string, promo?: string, page?: string }>
 }) {
   return (
+    <Suspense fallback={<DirectorySkeleton />}>
+       <DirectoryView searchParams={searchParams} />
+    </Suspense>
+  )
+}
+
+async function DirectoryView({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, page?: string }> }) {
+  return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-10 pb-24">
        <div className="space-y-6">
           <div>
              <h1 className="text-4xl font-black tracking-tight text-zinc-900 mb-2">Annuaire des Anciens</h1>
              <p className="text-zinc-500 font-bold">Retrouvez vos camarades et développez votre réseau au sein de l&apos;ESFHB Mali.</p>
           </div>
-          <Suspense fallback={<div className="h-20 bg-zinc-100 rounded-[32px] animate-pulse" />}>
-             <SearchBar searchParams={searchParams} />
-          </Suspense>
+          <SearchBar searchParams={searchParams} />
        </div>
-
-       <Suspense fallback={<DirectorySkeleton />}>
-          <AlumniList searchParams={searchParams} />
-       </Suspense>
+       <AlumniList searchParams={searchParams} />
     </div>
   )
 }
