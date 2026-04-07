@@ -8,14 +8,14 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-zinc-900 font-sans selection:bg-black selection:text-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-zinc-100/50 h-20 flex items-center px-6 md:px-12 justify-between">
-        <div className="flex items-center gap-4">
-          <div className="h-11">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-zinc-100/50 h-16 md:h-20 flex items-center px-6 md:px-12 justify-between">
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="h-9 md:h-11">
              <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
           </div>
           <div>
-            <div className="font-display font-black tracking-tighter text-xl leading-none text-zinc-950">ESFHB</div>
-            <div className="text-[9px] font-black text-brand tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Portail des Alumni</div>
+            <div className="font-display font-black tracking-tighter text-lg md:text-xl leading-none text-zinc-950 uppercase">ESFHB</div>
+            <div className="text-[8px] md:text-[9px] font-black text-brand tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">Portail des Alumni</div>
           </div>
         </div>
         <nav className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-600">
@@ -29,18 +29,18 @@ export default async function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex-1 pt-32 pb-20">
+      <main className="flex-1 pt-24 md:pt-32 pb-20">
         <section className="px-6 md:px-12 max-w-7xl mx-auto text-center md:text-left flex flex-col md:flex-row items-center gap-16 lg:gap-24">
           <div className="flex-1 space-y-8">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-50 text-zinc-500 text-[10px] font-black tracking-[0.25em] uppercase border border-zinc-100">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-50 text-zinc-500 text-[10px] font-black tracking-[0.25em] uppercase border border-zinc-100 mx-auto md:mx-0">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Excellence Médicale & Réseau
             </div>
-            <h1 className="text-6xl md:text-[88px] font-display font-black tracking-tighter leading-[0.9] text-zinc-950">
+            <h1 className="text-5xl md:text-[88px] font-display font-black tracking-tighter leading-[1] md:leading-[0.9] text-zinc-950">
               Le futur de la <br />
-              <span className="text-brand underline decoration-emerald-100 decoration-8 underline-offset-8">santé</span> se connecte.
+              <span className="text-brand underline decoration-emerald-100 decoration-4 md:decoration-8 underline-offset-8">santé</span> se connecte.
             </h1>
-            <p className="text-lg md:text-2xl text-zinc-500 max-w-2xl font-medium leading-relaxed">
+            <p className="text-lg md:text-2xl text-zinc-500 max-w-2xl font-medium leading-relaxed mx-auto md:mx-0">
               La plateforme officielle dédiée aux diplômés de l&apos;ESF F.H.B. Suivez votre carrière et restez connectés à l&apos;institution qui a formé votre expertise.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-5 pt-4">

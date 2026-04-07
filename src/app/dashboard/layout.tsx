@@ -83,7 +83,7 @@ export default async function DashboardLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-white md:m-3 md:rounded-[48px] md:shadow-2xl md:shadow-zinc-200/50 border border-zinc-100">
         {/* Mobile Header - Native Style */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-zinc-100 h-16 flex items-center px-6 justify-between">
+        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-zinc-100 h-16 flex items-center px-6 justify-between shadow-sm">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
               <Zap size={18} fill="white" />

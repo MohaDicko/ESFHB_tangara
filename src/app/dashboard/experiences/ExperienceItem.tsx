@@ -69,8 +69,8 @@ export default function ExperienceItem({ exp, index }: { exp: any, index: number
              )}
           </div>
        </div>
-       {/* Decorative numbers */}
-       <div className="absolute top-1/2 right-12 -translate-y-1/2 text-zinc-50 font-black text-[120px] select-none group-hover:text-zinc-100 transition-colors pointer-events-none">
+       {/* Decorative numbers - hidden on mobile to avoid overlap */}
+       <div className="hidden md:block absolute top-1/2 right-12 -translate-y-1/2 text-zinc-50 font-black text-[120px] select-none group-hover:text-zinc-100 transition-colors pointer-events-none">
           0{index + 1}
        </div>
     </div>

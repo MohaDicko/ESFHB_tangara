@@ -48,28 +48,28 @@ async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string,
   const promoYears = Array.from({ length: 20 }, (_, i) => 2024 - i)
 
   return (
-    <form action="/dashboard/directory" method="GET" className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-[32px] border border-zinc-100 shadow-sm">
+    <form action="/dashboard/directory" method="GET" className="flex flex-col lg:flex-row gap-4 bg-white p-4 rounded-[32px] border border-zinc-100 shadow-sm relative z-10">
       <input type="hidden" name="page" value="1" />
       <div className="flex-1 relative">
-        <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+        <Search size={22} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
         <input 
           name="q"
           defaultValue={q}
           placeholder="Rechercher par nom..."
-          className="w-full pl-12 pr-4 py-4 bg-zinc-50 border-none rounded-2xl font-medium focus:ring-2 focus:ring-brand/10 outline-none"
+          className="w-full pl-14 pr-4 py-5 bg-zinc-50 border-none rounded-2xl font-bold text-base focus:ring-2 focus:ring-brand/10 outline-none"
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <select 
           name="promo"
           defaultValue={promo}
-          className="px-6 py-4 bg-zinc-50 border-none rounded-2xl font-bold text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none"
+          className="flex-1 px-8 py-5 bg-zinc-50 border-none rounded-2xl font-bold text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none"
         >
           <option value="">Toutes les promos</option>
           {promoYears.map(y => <option key={y} value={y}>{y}</option>)}
         </select>
-        <button type="submit" className="bg-brand text-white px-8 py-4 rounded-2xl font-bold hover:brightness-110 transition-all shadow-lg shadow-brand/20 active:scale-95">
-          Appliquer
+        <button type="submit" className="w-full sm:w-auto bg-brand text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition-all shadow-lg shadow-brand/20 active:scale-95">
+          Filtrer
         </button>
       </div>
     </form>
