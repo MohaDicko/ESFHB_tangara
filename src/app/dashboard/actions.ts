@@ -123,3 +123,53 @@ export async function deleteExperience(id: string) {
   revalidatePath('/dashboard/experiences')
   return { success: 'Expérience supprimée' }
 }
+
+// ─── Actions Admin ────────────────────────────────────────────────────────────
+
+async function assertAdmin(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
+  const { data } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .single()
+  return data?.role === 'admin'
+}
+
+export async function adminDeleteMember(memberId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return { error: 'Non authentifié' }
+  if (!(await assertAdmin(supabase, user.id))) return { error: 'Accès refusé' }
+  if (memberId === user.id) return { error: 'Impossible de se supprimer soi-même' }
+
+  // La suppression dans auth.users cascade sur profiles et experiences (via FK ON DELETE CASCADE)
+  const { error } = await supabase.rpc('admin_delete_user', { target_user_id: memberId })
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/dashboard/admin')
+  return { success: 'Membre supprimé avec succès.' }
+}
+
+export async function adminToggleBlock(memberId: string, currentStatus: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return { error: 'Non authentifié' }
+  if (!(await assertAdmin(supabase, user.id))) return { error: 'Accès refusé' }
+  if (memberId === user.id) return { error: 'Impossible de se bloquer soi-même' }
+
+  const newStatus = currentStatus === 'Bloqué' ? 'En recherche' : 'Bloqué'
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({ status: newStatus })
+    .eq('id', memberId)
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/dashboard/admin')
+  return { success: newStatus === 'Bloqué' ? 'Membre bloqué.' : 'Membre débloqué.' }
+}
+

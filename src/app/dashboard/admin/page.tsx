@@ -6,13 +6,11 @@ import {
   ShieldAlert, 
   Download,
   Search,
-  MoreVertical,
-  Mail,
-  Filter,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
 import Link from 'next/link'
+import MemberActionsMenu from './MemberActionsMenu'
 
 export const unstable_instant = false
 const PAGE_SIZE = 20
@@ -77,10 +75,10 @@ export default async function AdminDashboardPage({
           <p className="text-zinc-500 font-bold">Gestion globale de l'annuaire et statistiques de l'école.</p>
         </div>
         <div className="flex items-center gap-4">
-          <button className="bg-zinc-100 text-zinc-900 px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-zinc-200 transition-all leading-none border border-zinc-200">
+          <a href="/api/export-csv" className="bg-zinc-100 text-zinc-900 px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-zinc-200 transition-all leading-none border border-zinc-200">
             <Download size={18} />
             Exporter CSV
-          </button>
+          </a>
         </div>
       </div>
 
@@ -181,9 +179,11 @@ export default async function AdminDashboardPage({
                   </td>
                   <td className="px-8 py-6 border-b border-zinc-50">
                     <div className="flex items-center gap-2">
-                       <button className="p-2 text-zinc-400 hover:text-brand transition-colors hover:bg-brand/5 rounded-lg">
-                          <MoreVertical size={18} />
-                       </button>
+                      <MemberActionsMenu
+                        memberId={member.id}
+                        memberName={member.full_name}
+                        currentStatus={member.status || ''}
+                      />
                     </div>
                   </td>
                 </tr>

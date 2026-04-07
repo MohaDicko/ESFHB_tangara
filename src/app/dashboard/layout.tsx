@@ -2,9 +2,10 @@ import { cache } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Settings, LogOut, Menu } from 'lucide-react'
+import { Settings, LogOut } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
+import MobileMenu from './MobileMenu'
 
 // Cache les requêtes Supabase pour toute la durée d'un rendu
 const getSessionData = cache(async () => {
@@ -78,9 +79,7 @@ export default async function DashboardLayout({
               <img src="/logo.jpg" alt="ESFHB Logo" className="h-8 w-auto" />
               <span className="font-extrabold tracking-tighter">Annuaire ESFHB</span>
            </div>
-           <button className="p-2 text-zinc-500">
-              <Menu size={24} />
-           </button>
+           <MobileMenu isAdmin={isAdmin} userEmail={user.email} logoutAction={logout} />
         </header>
 
         <div className="flex-1 overflow-y-auto">
