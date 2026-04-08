@@ -7,15 +7,17 @@ import {
   Settings, 
   LogOut,
   Zap,
-  Briefcase
+  Briefcase,
+  Star
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const navItems = [
   { href: '/dashboard', label: 'Accueil', icon: LayoutDashboard },
-  { href: '/dashboard/experiences', label: 'Mes Expériences', icon: Briefcase },
+  { href: '/dashboard/experiences', label: 'Mes Expériences', icon: Star },
   { href: '/dashboard/directory', label: 'Annuaire', icon: Users },
+  { href: '/dashboard/jobs', label: 'Opportunités', icon: Briefcase },
 ]
 
 export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, logout?: any }) {
@@ -63,7 +65,7 @@ export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, log
         })}
 
         {isAdmin && (
-          <div className="pt-10">
+          <div className="pt-10 space-y-2">
             <div className="text-[11px] font-black text-zinc-400 tracking-[0.2em] uppercase mb-6 pl-4">Administration</div>
             <Link
               href="/dashboard/admin"
@@ -75,6 +77,17 @@ export default function SidebarNav({ isAdmin, logout }: { isAdmin?: boolean, log
             >
               <ShieldCheck size={22} className={pathname === '/dashboard/admin' ? 'text-white' : 'text-zinc-500 group-hover:text-emerald-400'} />
               Gestion Membres
+            </Link>
+            <Link
+              href="/dashboard/admin/jobs"
+              className={`flex items-center gap-4 px-6 py-4.5 rounded-[22px] text-sm font-black transition-all duration-300 group ${
+                pathname === '/dashboard/admin/jobs'
+                  ? 'bg-brand text-white shadow-2xl shadow-brand/30'
+                  : 'text-zinc-200 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <Briefcase size={22} className={pathname === '/dashboard/admin/jobs' ? 'text-white' : 'text-zinc-500 group-hover:text-brand'} />
+              Offres d'Emploi
             </Link>
           </div>
         )}

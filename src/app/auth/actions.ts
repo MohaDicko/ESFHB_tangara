@@ -13,7 +13,8 @@ const authSchema = z.object({
 
 const signupSchema = authSchema.extend({
   fullName: z.string().min(2, "Le nom doit faire au moins 2 caractères"),
-  promoYear: z.string().regex(/^\d{4}$/, "Année de promotion invalide (ex: 2024)")
+  promoYear: z.string().regex(/^\d{4}$/, "Année de promotion invalide (ex: 2024)"),
+  specialty: z.string().min(2, "Spécialité requise")
 })
 
 /**
@@ -58,7 +59,7 @@ export async function signup(formData: FormData) {
     return { error: validation.error.issues[0].message }
   }
 
-  const { email, password, fullName, promoYear } = validation.data
+  const { email, password, fullName, promoYear, specialty } = validation.data
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -68,6 +69,7 @@ export async function signup(formData: FormData) {
       data: {
         full_name: fullName,
         promo_year: parseInt(promoYear),
+        specialty,
       },
     },
   })

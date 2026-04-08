@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  Menu, X, LayoutDashboard, UserCircle, Briefcase,
+  Menu, X, LayoutDashboard, UserCircle, Briefcase, Star,
   Users, Settings, ShieldCheck, LogOut, Zap, ArrowRight
 } from 'lucide-react'
 
@@ -17,8 +17,9 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: '/dashboard',             label: "Vue d'ensemble", icon: LayoutDashboard },
   { href: '/dashboard/profile',     label: 'Mon Profil',     icon: UserCircle },
-  { href: '/dashboard/experiences', label: 'Mes Expériences',icon: Briefcase },
+  { href: '/dashboard/experiences', label: 'Mes Expériences',icon: Star },
   { href: '/dashboard/directory',   label: 'Annuaire',       icon: Users },
+  { href: '/dashboard/jobs',        label: 'Opportunités',   icon: Briefcase },
 ]
 
 interface Props {
@@ -99,15 +100,26 @@ export default function MobileMenu({ isAdmin, userEmail, logoutAction }: Props) 
            {/* Actions */}
            <div className="space-y-4">
               {isAdmin && (
-                <Link 
-                  href="/dashboard/admin" 
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-4 p-5 bg-zinc-50 rounded-2xl text-zinc-900 font-bold hover:bg-brand hover:text-white transition-all group"
-                >
-                   <ShieldCheck size={20} className="text-brand group-hover:text-white" />
-                   Espace Admin
-                   <ArrowRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
+                <>
+                  <Link 
+                    href="/dashboard/admin" 
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-4 p-5 bg-zinc-50 rounded-2xl text-zinc-900 font-bold hover:bg-emerald-600 hover:text-white transition-all group"
+                  >
+                     <ShieldCheck size={20} className="text-emerald-600 group-hover:text-white" />
+                     Espace Admin
+                     <ArrowRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                  <Link 
+                    href="/dashboard/admin/jobs" 
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-4 p-5 bg-brand/5 border border-brand/10 rounded-2xl text-zinc-900 font-bold hover:bg-brand hover:text-white transition-all group"
+                  >
+                     <Briefcase size={20} className="text-brand group-hover:text-white" />
+                     Gérer les offres
+                     <ArrowRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </>
               )}
               <Link 
                 href="/dashboard/settings" 

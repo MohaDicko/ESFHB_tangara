@@ -7,7 +7,8 @@ import {
   Download,
   Search,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Briefcase
 } from 'lucide-react'
 import Link from 'next/link'
 import MemberActionsMenu from './MemberActionsMenu'
@@ -74,6 +75,10 @@ export default async function AdminDashboardPage({
           <p className="text-zinc-500 font-bold">Gestion globale de l'annuaire et statistiques de l'école.</p>
         </div>
         <div className="flex items-center gap-4">
+          <Link href="/dashboard/admin/jobs" className="bg-brand text-white px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:brightness-110 transition-all leading-none shadow-xl shadow-brand/20">
+            <Briefcase size={18} />
+            Gérer les offres
+          </Link>
           <a href="/api/export-csv" className="bg-zinc-100 text-zinc-900 px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-zinc-200 transition-all leading-none border border-zinc-200">
             <Download size={18} />
             Exporter CSV

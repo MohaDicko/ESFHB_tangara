@@ -21,14 +21,15 @@ ALTER TABLE profiles
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name, promo_year, email, is_email_public, is_contact_public)
+  INSERT INTO public.profiles (id, full_name, promo_year, email, is_email_public, is_contact_public, specialty)
   VALUES (
     new.id, 
     COALESCE(new.raw_user_meta_data->>'full_name', 'Nouvel alumnus'),
     COALESCE((new.raw_user_meta_data->>'promo_year')::integer, 2024),
     new.email,
     true,
-    false
+    false,
+    new.raw_user_meta_data->>'specialty'
   )
   ON CONFLICT (id) DO NOTHING;
   

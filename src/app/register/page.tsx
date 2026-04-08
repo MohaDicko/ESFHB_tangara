@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { signup } from '../auth/actions'
-import { ArrowRight, Zap, Loader2, GraduationCap, User, Mail, Lock } from 'lucide-react'
+import { ArrowRight, Zap, Loader2, GraduationCap, User, Mail, Lock, Stethoscope } from 'lucide-react'
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false)
@@ -79,6 +79,27 @@ export default function RegisterPage() {
                       required
                       className="w-full pl-12 pr-4 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all font-medium"
                     />
+                 </div>
+              </div>
+
+              <div className="space-y-2">
+                 <label htmlFor="specialty" className="text-xs font-black uppercase tracking-widest text-zinc-400 ml-1">Spécialité</label>
+                 <div className="relative">
+                    <Stethoscope size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                    <select
+                      id="specialty"
+                      name="specialty"
+                      required
+                      className="w-full pl-12 pr-4 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all font-medium appearance-none"
+                    >
+                      <option value="" disabled selected>Sélectionner une spécialité</option>
+                      <option value="SMI">SMI — Santé Maternelle et Infantile</option>
+                      <option value="SP">SP — Santé Publique</option>
+                      <option value="TLP">TLP — Technicien de Labo. Pharmaceutique</option>
+                      <option value="BM">BM — Biologie Médicale</option>
+                      <option value="SF">SF — Sage-Femme</option>
+                      <option value="IDE">IDE — Infirmier Diplômé d'État</option>
+                    </select>
                  </div>
               </div>
 
