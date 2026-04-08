@@ -19,7 +19,7 @@ const PAGE_SIZE = 24
 export default async function DirectoryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string, promo?: string, page?: string }>
+  searchParams: Promise<{ q?: string, promo?: string, specialty?: string, page?: string }>
 }) {
   return (
     <Suspense fallback={<DirectorySkeleton />}>
@@ -28,7 +28,7 @@ export default async function DirectoryPage({
   )
 }
 
-async function DirectoryView({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, page?: string }> }) {
+async function DirectoryView({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, specialty?: string, page?: string }> }) {
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-10 pb-24">
        <div className="space-y-6">
@@ -43,8 +43,8 @@ async function DirectoryView({ searchParams }: { searchParams: Promise<{ q?: str
   )
 }
 
-async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string }> }) {
-  const { q, promo } = await searchParams
+async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, specialty?: string }> }) {
+  const { q, promo, specialty } = await searchParams
   const promoYears = Array.from({ length: 20 }, (_, i) => 2024 - i)
 
   return (
@@ -56,19 +56,32 @@ async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string,
           name="q"
           defaultValue={q}
           placeholder="Rechercher par nom..."
-          className="w-full pl-14 pr-4 py-5 bg-zinc-50 border-none rounded-2xl font-bold text-base focus:ring-2 focus:ring-brand/10 outline-none"
+          className="w-full pl-12 sm:pl-14 pr-4 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base focus:ring-2 focus:ring-brand/10 outline-none"
         />
       </div>
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 sm:gap-4 w-full lg:w-auto">
         <select 
           name="promo"
           defaultValue={promo}
-          className="flex-1 px-8 py-5 bg-zinc-50 border-none rounded-2xl font-bold text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none"
+          className="col-span-1 lg:flex-none lg:w-[160px] px-3 sm:px-6 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none truncate"
         >
-          <option value="">Toutes les promos</option>
+          <option value="">Toutes promos</option>
           {promoYears.map(y => <option key={y} value={y}>{y}</option>)}
         </select>
-        <button type="submit" className="w-full sm:w-auto bg-brand text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition-all shadow-lg shadow-brand/20 active:scale-95">
+        <select 
+          name="specialty"
+          defaultValue={specialty}
+          className="col-span-1 lg:flex-none lg:w-[180px] px-3 sm:px-6 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none truncate"
+        >
+          <option value="">Toutes spécialités</option>
+          <option value="SMI">SMI</option>
+          <option value="SP">SP</option>
+          <option value="TLP">TLP</option>
+          <option value="BM">BM</option>
+          <option value="SF">SF</option>
+          <option value="IDE">IDE</option>
+        </select>
+        <button type="submit" className="col-span-2 lg:col-span-none lg:w-auto bg-brand text-white px-10 py-4 sm:py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition-all shadow-lg shadow-brand/20 active:scale-95">
           Filtrer
         </button>
       </div>
@@ -76,8 +89,8 @@ async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string,
   )
 }
 
-async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, page?: string }> }) {
-  const { q, promo, page } = await searchParams
+async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, specialty?: string, page?: string }> }) {
+  const { q, promo, specialty, page } = await searchParams
   const currentPage = Math.max(1, parseInt(page || '1'))
   const from = (currentPage - 1) * PAGE_SIZE
   const to = from + PAGE_SIZE - 1
@@ -92,6 +105,7 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
 
   if (q && q.trim()) query = query.ilike('full_name', `%${q.trim()}%`)
   if (promo && promo !== '') query = query.eq('promo_year', parseInt(promo))
+  if (specialty && specialty !== '') query = query.eq('specialty', specialty)
 
   // Range APRÈS les filtres
   query = query.range(from, to)
@@ -115,6 +129,7 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
   const params = new URLSearchParams()
   if (q) params.set('q', q)
   if (promo) params.set('promo', promo)
+  if (specialty) params.set('specialty', specialty)
 
   return (
     <div className="space-y-8">
