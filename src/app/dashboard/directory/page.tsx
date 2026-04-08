@@ -9,7 +9,8 @@ import {
   Mail,
   Phone,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Download
 } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -29,12 +30,32 @@ export default async function DirectoryPage({
 }
 
 async function DirectoryView({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, specialty?: string, status?: string, page?: string }> }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  let isAdmin = false
+  if (user) {
+    const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single()
+    isAdmin = roleData?.role === 'admin'
+  }
+  const { q, promo, specialty, status } = await searchParams
+
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-10 pb-24">
        <div className="space-y-6">
-          <div>
-             <h1 className="text-4xl font-black tracking-tight text-zinc-900 mb-2">Annuaire des Anciens</h1>
-             <p className="text-zinc-500 font-bold">Retrouvez vos camarades et développez votre réseau au sein de l&apos;ESFHB Mali.</p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div>
+               <h1 className="text-4xl font-black tracking-tight text-zinc-900 mb-2">Annuaire des Anciens</h1>
+               <p className="text-zinc-500 font-bold">Retrouvez camarades et réseau ESFHB Mali.</p>
+            </div>
+            {isAdmin && (
+              <a 
+                href={`/api/admin/export?${new URLSearchParams([ ...(q ? [['q', q]] : []), ...(status ? [['status', status]] : []), ...(promo ? [['promo', promo]] : []), ...(specialty ? [['specialty', specialty]] : []) ]).toString()}`} 
+                target="_blank"
+                className="flex items-center gap-2 px-6 py-3 bg-brand/10 text-brand rounded-2xl text-sm font-black hover:bg-brand hover:text-white transition-all shrink-0 active:scale-95 shadow-sm border border-brand/20 w-fit"
+              >
+                <Download size={16} /> Exporter Excel
+              </a>
+            )}
           </div>
           <SearchBar searchParams={searchParams} />
        </div>
