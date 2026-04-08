@@ -24,10 +24,10 @@ async function runSql() {
     await client.connect()
     console.log('Connected!')
 
-    const sqlPath = path.join(__dirname, 'supabase_setup.sql')
+    const sqlPath = path.join(__dirname, 'update_specialties.sql')
     const sql = fs.readFileSync(sqlPath, 'utf8')
 
-    console.log('Executing supabase_setup.sql...')
+    console.log('Executing update_specialties.sql...')
     await client.query(sql)
     console.log('✅ Configuration successfully applied to Supabase!')
 

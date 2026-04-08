@@ -99,11 +99,13 @@ export default function ProfileForm({ profile }: { profile: any }) {
                      <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Statut Actuel</label>
                      <select 
                        name="status"
-                       defaultValue={profile?.status || 'En recherche'}
+                       defaultValue={profile?.status || 'Sans emploi'}
                        className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl font-bold focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black appearance-none transition-all"
                      >
-                        <option value="En poste">💼 En poste</option>
-                        <option value="En recherche">🔍 En recherche</option>
+                        <option value="Privé">🏢 Secteur Privé</option>
+                        <option value="Public">🏛️ Secteur Public</option>
+                        <option value="Sans emploi">🔍 Sans emploi</option>
+                        <option value="Bénévolat">🤝 Bénévolat</option>
                         <option value="Entrepreneur">🚀 Entrepreneur</option>
                         <option value="Étudiant">🎓 Étudiant</option>
                      </select>

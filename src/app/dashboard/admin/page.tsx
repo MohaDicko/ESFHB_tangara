@@ -18,9 +18,9 @@ const PAGE_SIZE = 20
 export default async function AdminDashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string, page?: string }>
+  searchParams: Promise<{ q?: string, page?: string, status?: string }>
 }) {
-  const { q, page } = await searchParams
+  const { q, page, status } = await searchParams
   const currentPage = Math.max(1, parseInt(page || '1'))
   const from = (currentPage - 1) * PAGE_SIZE
   const to = from + PAGE_SIZE - 1
@@ -49,7 +49,7 @@ export default async function AdminDashboardPage({
   const { count: enPoste } = await supabase
     .from('profiles')
     .select('*', { count: 'exact', head: true })
-    .eq('status', 'En poste')
+    .in('status', ['Privé', 'Public'])
 
   // Fetch all profiles for the management table (paginated & filtered)
   let query = supabase
@@ -58,6 +58,7 @@ export default async function AdminDashboardPage({
     .order('created_at', { ascending: false })
 
   if (q && q.trim()) query = query.ilike('full_name', `%${q.trim()}%`)
+  if (status && status !== '') query = query.eq('status', status)
 
   query = query.range(from, to)
 
@@ -115,27 +116,46 @@ export default async function AdminDashboardPage({
 
       {/* Members Table */}
       <div className="bg-white border border-zinc-100 rounded-[48px] overflow-hidden shadow-sm">
-        <div className="p-8 border-b border-zinc-50 flex flex-col md:flex-row justify-between gap-6 items-center">
+        <div className="p-8 border-b border-zinc-50 flex flex-col md:flex-row justify-between gap-6 items-center flex-wrap">
           <div>
             <h2 className="text-2xl font-black tracking-tight">Gestion des Membres</h2>
             <p className="text-sm text-zinc-500 font-bold">{membersCount || 0} membres trouvés</p>
           </div>
-          <form action="/dashboard/admin" method="GET" className="flex gap-4 w-full md:w-auto">
-            <input type="hidden" name="page" value="1" />
-            <div className="relative flex-1 md:w-64 flex">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-              <input 
-                name="q"
-                defaultValue={q}
-                type="text" 
-                placeholder="Chercher un nom..." 
-                className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-xl text-sm font-medium focus:ring-2 focus:ring-black/5 outline-none"
-              />
-            </div>
-            <button type="submit" className="px-6 py-3 bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors shrink-0">
-              Chercher
-            </button>
-          </form>
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
+            <form action="/dashboard/admin" method="GET" className="flex gap-4 w-full md:w-auto">
+              <input type="hidden" name="page" value="1" />
+              <div className="relative flex-1 md:w-48 flex">
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                <input 
+                  name="q"
+                  defaultValue={q}
+                  type="text" 
+                  placeholder="Nom..." 
+                  className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-xl text-sm font-medium focus:ring-2 focus:ring-black/5 outline-none"
+                />
+              </div>
+              <select name="status" defaultValue={status} className="px-4 py-3 bg-zinc-50 border-none rounded-xl text-sm font-medium focus:ring-2 focus:ring-black/5 outline-none appearance-none cursor-pointer">
+                <option value="">Tous les statuts</option>
+                <option value="Privé">Secteur Privé</option>
+                <option value="Public">Secteur Public</option>
+                <option value="Sans emploi">Sans emploi</option>
+                <option value="Bénévolat">Bénévolat</option>
+                <option value="Entrepreneur">Entrepreneur</option>
+                <option value="Étudiant">Étudiant</option>
+              </select>
+              <button type="submit" className="px-6 py-3 bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors shrink-0 shadow-lg shadow-black/10 active:scale-95">
+                Filtrer
+              </button>
+            </form>
+            
+            <a 
+              href={`/api/admin/export${status ? `?status=${status}` : ''}`} 
+              target="_blank"
+              className="flex items-center gap-2 px-6 py-3 bg-brand/10 text-brand rounded-xl text-sm font-black hover:bg-brand hover:text-white transition-all shrink-0 w-full md:w-auto justify-center active:scale-95"
+            >
+              <Download size={16} /> Exporter CSV
+            </a>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
