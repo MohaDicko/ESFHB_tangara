@@ -149,7 +149,7 @@ export default async function AdminDashboardPage({
             </form>
             
             <a 
-              href={`/api/admin/export${status ? `?status=${status}` : ''}`} 
+              href={`/api/admin/export?${new URLSearchParams([ ...(q ? [['q', q]] : []), ...(status ? [['status', status]] : []) ]).toString()}`} 
               target="_blank"
               className="flex items-center gap-2 px-6 py-3 bg-brand/10 text-brand rounded-xl text-sm font-black hover:bg-brand hover:text-white transition-all shrink-0 w-full md:w-auto justify-center active:scale-95"
             >

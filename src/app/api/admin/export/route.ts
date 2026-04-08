@@ -22,14 +22,26 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status')
+  const q = searchParams.get('q')
+  const promo = searchParams.get('promo')
+  const specialty = searchParams.get('specialty')
 
   let query = supabase
     .from('profiles')
     .select('full_name, email, promo_year, specialty, city, country, phone, status')
     .order('created_at', { ascending: false })
 
+  if (q && q.trim()) {
+    query = query.ilike('full_name', `%${q.trim()}%`)
+  }
   if (status && status !== '') {
     query = query.eq('status', status)
+  }
+  if (promo && promo !== '') {
+    query = query.eq('promo_year', parseInt(promo, 10))
+  }
+  if (specialty && specialty !== '') {
+    query = query.eq('specialty', specialty)
   }
 
   const { data: alumni, error } = await query
@@ -63,8 +75,8 @@ export async function GET(request: Request) {
   // Add UTF-8 BOM so Excel opens it with the correct encoding immediately
   const csvContent = "\uFEFF" + csvRows.join('\n')
 
-  const formattedStatus = status ? status.toLowerCase().replace(/\s+/g, '_') : 'complet'
-  const filename = `esfhb_alumni_${formattedStatus}.csv`
+  const paramsStr = Array.from(searchParams.values()).filter(Boolean).join('_')
+  const filename = `esfhb_alumni${paramsStr ? `_${paramsStr.toLowerCase().replace(/\s+/g, '_')}` : '_complet'}.csv`
 
   return new NextResponse(csvContent, {
     headers: {
