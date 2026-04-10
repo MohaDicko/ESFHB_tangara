@@ -55,7 +55,7 @@ async function DashboardHeader() {
     .single()
 
   return (
-    <div className="relative p-10 md:p-14 bg-zinc-900 rounded-[48px] overflow-hidden group shadow-2xl shadow-blue-900/10">
+    <div className="relative p-7 md:p-14 bg-zinc-900 rounded-[32px] md:rounded-[48px] overflow-hidden group shadow-2xl shadow-blue-900/10">
       {/* Background patterns */}
       <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-brand/20 to-transparent z-0" />
       <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-medical/10 rounded-full blur-3xl z-0" />
@@ -75,21 +75,21 @@ async function DashboardHeader() {
               <span className="text-[10px] font-black text-zinc-100 uppercase tracking-widest">Portail Alumni Officiel</span>
            </div>
            <div>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-2 leading-none">
+              <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-2 leading-[0.9]">
                 Bonjour, <br />
                 <span className="text-brand italic">{profile?.full_name?.split(' ')[0] || 'Alumni'}</span>
               </h1>
-              <p className="text-zinc-400 font-bold text-lg md:text-xl max-w-md leading-relaxed mt-4">
+              <p className="text-zinc-400 font-bold text-base md:text-xl max-w-md leading-relaxed mt-4">
                 Heureux de vous revoir sur votre espace professionnel {profile?.specialty ? `en ${profile.specialty}` : ''}.
               </p>
            </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-           <Link href="/dashboard/experiences" className="w-full sm:w-auto bg-brand text-white px-8 py-5 rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-blue-600 transition-all shadow-xl shadow-brand/20 active:scale-95">
+        <div className="flex flex-col sm:flex-row items-center gap-3">
+           <Link href="/dashboard/experiences" className="w-full sm:w-auto bg-brand text-white px-7 py-4 md:px-8 md:py-5 rounded-[20px] md:rounded-[24px] font-black uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-3 hover:bg-blue-600 transition-all shadow-xl shadow-brand/20 active:scale-95 leading-none">
               <PlusCircle size={18} />
               Ma Carrière
            </Link>
-           <Link href="/dashboard/directory" className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white border border-white/10 px-8 py-5 rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-white/20 transition-all active:scale-95">
+           <Link href="/dashboard/directory" className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white border border-white/10 px-7 py-4 md:px-8 md:py-5 rounded-[20px] md:rounded-[24px] font-black uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-3 hover:bg-white/20 transition-all active:scale-95 leading-none">
               <Search size={18} />
               Recherche
            </Link>
