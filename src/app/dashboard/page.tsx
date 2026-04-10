@@ -50,24 +50,50 @@ async function DashboardHeader() {
   const { data: { user } } = await supabase.auth.getUser()
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name')
+    .select('full_name, specialty')
     .eq('id', user?.id)
     .single()
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-      <div>
-         <div className="text-xs font-black text-blue-600 uppercase tracking-[0.2em] mb-3">Tableau de bord personnel</div>
-         <h1 className="text-4xl md:text-5xl font-black tracking-tight text-zinc-900">
-           Content de vous revoir, <br />
-           <span className="text-zinc-400 font-extrabold">{profile?.full_name || 'Alumni'}</span>
-         </h1>
+    <div className="relative p-10 md:p-14 bg-zinc-900 rounded-[48px] overflow-hidden group shadow-2xl shadow-blue-900/10">
+      {/* Background patterns */}
+      <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-brand/20 to-transparent z-0" />
+      <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-medical/10 rounded-full blur-3xl z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-5 pointer-events-none z-0 overflow-hidden">
+         <svg width="100%" height="100%" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 200 Q 100 100 200 200 T 400 200 T 600 200 T 800 200" fill="none" stroke="white" strokeWidth="2" className="animate-[pulse_4s_infinite]" />
+            <circle cx="200" cy="200" r="4" fill="white" />
+            <circle cx="400" cy="200" r="4" fill="white" />
+            <circle cx="600" cy="200" r="4" fill="white" />
+         </svg>
       </div>
-      <div className="flex items-center gap-4">
-         <Link href="/dashboard/experiences" className="bg-black text-white px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-zinc-800 transition-all shadow-xl shadow-black/10 active:scale-95 leading-none">
-            <PlusCircle size={18} />
-            Ajouter une expérience
-         </Link>
+
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+        <div className="space-y-4">
+           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-medical animate-pulse" />
+              <span className="text-[10px] font-black text-zinc-100 uppercase tracking-widest">Portail Alumni Officiel</span>
+           </div>
+           <div>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-2 leading-none">
+                Bonjour, <br />
+                <span className="text-brand italic">{profile?.full_name?.split(' ')[0] || 'Alumni'}</span>
+              </h1>
+              <p className="text-zinc-400 font-bold text-lg md:text-xl max-w-md leading-relaxed mt-4">
+                Heureux de vous revoir sur votre espace professionnel {profile?.specialty ? `en ${profile.specialty}` : ''}.
+              </p>
+           </div>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+           <Link href="/dashboard/experiences" className="w-full sm:w-auto bg-brand text-white px-8 py-5 rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-blue-600 transition-all shadow-xl shadow-brand/20 active:scale-95">
+              <PlusCircle size={18} />
+              Ma Carrière
+           </Link>
+           <Link href="/dashboard/directory" className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white border border-white/10 px-8 py-5 rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-white/20 transition-all active:scale-95">
+              <Search size={18} />
+              Recherche
+           </Link>
+        </div>
       </div>
     </div>
   )
@@ -209,11 +235,12 @@ function SidebarWidgets() {
 
 function KpiCard({ icon, label, value, desc }: { icon: React.ReactNode, label: string, value: string, desc: string }) {
   return (
-    <div className="p-6 bg-white border border-zinc-100 rounded-[32px] hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1 transition-all group">
-       <div className="w-12 h-12 bg-zinc-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">{icon}</div>
-       <div className="text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">{label}</div>
-       <div className="text-2xl font-black text-zinc-900 mb-1">{value}</div>
-       <div className="text-[10px] font-bold text-zinc-500 leading-tight">{desc}</div>
+    <div className="p-8 bg-white border border-zinc-100 rounded-[40px] hover:shadow-2xl hover:shadow-brand/5 hover:border-brand/20 hover:-translate-y-2 transition-all group relative overflow-hidden">
+       <div className="absolute -right-8 -top-8 w-24 h-24 bg-zinc-50 rounded-full group-hover:bg-brand/5 transition-colors" />
+       <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-white group-hover:shadow-lg transition-all border border-zinc-100/50">{icon}</div>
+       <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-2">{label}</div>
+       <div className="text-3xl font-black text-zinc-900 mb-2 truncate">{value}</div>
+       <div className="text-xs font-bold text-zinc-500 leading-relaxed max-w-[140px]">{desc}</div>
     </div>
   )
 }
