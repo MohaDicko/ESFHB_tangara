@@ -26,6 +26,14 @@ const experienceSchema = z.object({
   is_current: z.boolean().default(false),
   sector: z.string().max(50).optional(),
   description: z.string().max(1000).optional()
+}).refine(data => {
+  if (!data.is_current && data.end_date && data.start_date) {
+    return new Date(data.end_date) >= new Date(data.start_date)
+  }
+  return true
+}, {
+  message: "La date de fin ne peut pas être antérieure à la date de début",
+  path: ["end_date"]
 })
 
 export async function updateProfile(formData: FormData) {

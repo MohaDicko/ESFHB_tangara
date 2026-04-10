@@ -30,6 +30,10 @@ export default async function AlumniProfilePage({
     notFound()
   }
 
+  // Sécurité : On ne transmet pas les données privées au client
+  if (!profile.is_email_public) profile.email = null
+  if (!profile.is_contact_public) profile.phone = null
+
   return (
     <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-700">
        {/* Back Button */}
