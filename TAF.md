@@ -12,7 +12,8 @@ Ce fichier résume l'état final du projet à ce jour et liste le travail à fai
   - La récupération de toutes les données a été limitée aux stricts champs utiles (optimisation).
   - **L'annuaire est désormais paginé (24 profils par page)**, garantissant une navigation fluide même avec des milliers d'inscrits.
   - Création d'un script de *seeding* qui a généré 213 profils maliens aléatoires et 250 expériences pro pour alimenter la plateforme.
-- **Dashboard Personnel & Graphiques :** Les requêtes lourdes ont été retirées, les statistiques chargent instantanément et calculent la tendance globale avec `Promise.all` et une requête `exact count` sur la base.
+- **Dashboard Personnel & Graphiques :** Les requêtes lourdes ont été retirées, les statistiques chargent instantanément.
+- **Correction Bug Statuts (FIXÉ) :** Synchronisation complète des statuts ("Privé", "Public", "Sans emploi", etc.) entre le Frontend, le Dashboard, l'Annuaire et la validation Zod.
 - **Dashboard Admin :** L'interface admin supporte elle aussi la vraie pagination avec recherche filtrée des membres sans ralentissement.
 
 ---

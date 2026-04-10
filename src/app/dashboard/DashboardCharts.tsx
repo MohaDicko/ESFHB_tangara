@@ -17,8 +17,8 @@ const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#8b5cf6', '#f43f5e']
 
 export function EmploymentChart({ data }: { data: any[] }) {
   const chartData = data.length > 0 ? data : [
-    { name: 'En poste', value: 45 },
-    { name: 'En recherche', value: 25 },
+    { name: 'Privé/Public', value: 45 },
+    { name: 'Sans emploi', value: 25 },
     { name: 'Entrepreneur', value: 15 },
     { name: 'Étudiant', value: 15 },
   ]

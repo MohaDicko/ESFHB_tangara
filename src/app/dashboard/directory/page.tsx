@@ -113,6 +113,7 @@ async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string,
           <option value="Sans emploi">Sans emploi</option>
           <option value="Bénévolat">Bénévolat</option>
           <option value="Entrepreneur">Entrepreneur</option>
+          <option value="Étudiant">Étudiant</option>
         </select>
         <button type="submit" className="col-span-2 lg:col-span-none lg:w-auto bg-brand text-white px-10 py-4 sm:py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition-all shadow-lg shadow-brand/20 active:scale-95">
           Filtrer

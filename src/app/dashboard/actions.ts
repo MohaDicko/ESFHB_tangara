@@ -13,7 +13,7 @@ const profileSchema = z.object({
   city: z.string().max(50).optional(),
   country: z.string().max(50).optional(),
   avatar_url: z.string().url().or(z.literal("")).optional(),
-  status: z.enum(['En poste', 'En recherche', 'Entrepreneur', 'Étudiant']),
+  status: z.enum(['Privé', 'Public', 'Sans emploi', 'Bénévolat', 'Entrepreneur', 'Étudiant']),
   is_email_public: z.boolean().default(false),
   is_contact_public: z.boolean().default(false)
 })
@@ -160,7 +160,7 @@ export async function adminToggleBlock(memberId: string, currentStatus: string) 
   if (!(await assertAdmin(supabase, user.id))) return { error: 'Accès refusé' }
   if (memberId === user.id) return { error: 'Impossible de se bloquer soi-même' }
 
-  const newStatus = currentStatus === 'Bloqué' ? 'En recherche' : 'Bloqué'
+  const newStatus = currentStatus === 'Bloqué' ? 'Sans emploi' : 'Bloqué'
 
   const { error } = await supabase
     .from('profiles')

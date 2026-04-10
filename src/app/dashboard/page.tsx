@@ -83,7 +83,7 @@ async function KpiSection() {
        <KpiCard icon={<TrendingUp size={24} className="text-green-600" />} label="Ma Visibilité" value="Top 15%" desc="Parmis les alumni de votre promotion" />
        <KpiCard icon={<UsersIcon size={24} className="text-blue-600" />} label="Réseau Promo" value="124" desc="Membres actifs cette semaine" />
        <KpiCard icon={<MapPin size={24} className="text-purple-600" />} label="Opportunités" value="12" desc="Offres proches de vous" />
-       <KpiCard icon={<Building2 size={24} className="text-orange-600" />} label="Statut Actuel" value={profile?.status || 'En recherche'} desc="Mise à jour il y a 2j" />
+       <KpiCard icon={<Building2 size={24} className="text-orange-600" />} label="Statut Actuel" value={profile?.status || 'Sans emploi'} desc="Mise à jour il y a 2j" />
     </div>
   )
 }
@@ -93,7 +93,7 @@ async function StatusChartSection() {
   const { data: statusFallback } = await supabase.from('profiles').select('status')
   
   const statusCounts = (statusFallback || []).reduce((acc: Record<string, number>, curr: { status: string }) => {
-    const s = curr.status || 'En recherche'
+    const s = curr.status || 'Sans emploi'
     acc[s] = (acc[s] || 0) + 1
     return acc
   }, {})

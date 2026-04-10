@@ -40,7 +40,7 @@ export default function ProfileForm({ profile }: { profile: any }) {
       const formData = new FormData()
       formData.append('avatar_url', publicUrl)
       formData.append('full_name', profile?.full_name || 'Alumni')
-      formData.append('status', profile?.status || 'En recherche')
+      formData.append('status', profile?.status || 'Sans emploi')
       if (profile?.is_email_public) formData.append('is_email_public', 'on')
       if (profile?.is_contact_public) formData.append('is_contact_public', 'on')
       await updateProfile(formData)

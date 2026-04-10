@@ -195,9 +195,9 @@ export default async function AdminDashboardPage({
                   </td>
                   <td className="px-8 py-6 border-b border-zinc-50">
                     <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      member.status === 'En poste' ? 'bg-green-50 text-green-600' : 'bg-brand/5 text-brand'
+                      ['Privé', 'Public'].includes(member.status) ? 'bg-green-50 text-green-600' : 'bg-brand/5 text-brand'
                     }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${member.status === 'En poste' ? 'bg-green-600' : 'bg-brand animate-pulse'}`} />
+                      <span className={`w-1.5 h-1.5 rounded-full ${['Privé', 'Public'].includes(member.status) ? 'bg-green-600' : 'bg-brand animate-pulse'}`} />
                       {member.status}
                     </div>
                   </td>

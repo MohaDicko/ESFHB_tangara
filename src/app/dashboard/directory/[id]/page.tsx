@@ -62,7 +62,7 @@ export default async function AlumniProfilePage({
              </div>
 
              <div className={`inline-flex px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${
-               profile.status === 'En poste' ? 'bg-green-50 text-green-600' : 'bg-brand/5 text-brand'
+               ['Privé', 'Public'].includes(profile.status) ? 'bg-green-50 text-green-600' : 'bg-brand/5 text-brand'
              }`}>
                 {profile.status}
              </div>
