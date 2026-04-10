@@ -235,7 +235,7 @@ function SidebarWidgets() {
 
 function KpiCard({ icon, label, value, desc }: { icon: React.ReactNode, label: string, value: string, desc: string }) {
   return (
-    <div className="p-8 bg-white border border-zinc-100 rounded-[40px] hover:shadow-2xl hover:shadow-brand/5 hover:border-brand/20 hover:-translate-y-2 transition-all group relative overflow-hidden">
+    <div className="p-8 bg-white border border-zinc-100 rounded-[40px] hover:shadow-2xl hover:shadow-brand/5 hover:border-brand/20 hover:-translate-y-2 transition-all group relative overflow-hidden gradient-border">
        <div className="absolute -right-8 -top-8 w-24 h-24 bg-zinc-50 rounded-full group-hover:bg-brand/5 transition-colors" />
        <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-white group-hover:shadow-lg transition-all border border-zinc-100/50">{icon}</div>
        <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-2">{label}</div>
