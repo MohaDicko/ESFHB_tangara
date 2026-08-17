@@ -6,6 +6,7 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://esfhb-alumni.vercel
 export const metadata: Metadata = {
   title: "ÉCOLE DE SANTÉ Félix Houphouët Boigny | Alumni Tracker",
   description: "La plateforme officielle d'insertion et de suivi des diplômés de l'École de Santé F. Houphouët Boigny (ESFHB). Réseautez et gérez votre carrière.",
+  manifest: "/manifest.json",
   metadataBase: new URL(baseUrl),
   openGraph: {
     title: "Réseau Alumni ESFHB",

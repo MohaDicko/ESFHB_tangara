@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "npx tsx scripts/run-tests.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
@@ -30,6 +31,7 @@
     "eslint-config-next": "16.2.2",
     "pg": "^8.20.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }

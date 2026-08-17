@@ -1,0 +1,16 @@
+{
+  "name": "ESFHB Alumni Tracking System",
+  "short_name": "ESFHB Alumni",
+  "description": "Plateforme de gestion et d'annuaire des diplômés de l'ESFHB",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

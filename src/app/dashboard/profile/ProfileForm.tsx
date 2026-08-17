@@ -14,19 +14,73 @@ export default function ProfileForm({ profile }: { profile: any }) {
   
   const supabase = createClient()
 
+  async function compressImage(file: File, maxWidth = 500, maxHeight = 500, quality = 0.8): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (event) => {
+        const img = new window.Image()
+        img.src = event.target?.result as string
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          let width = img.width
+          let height = img.height
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width)
+              width = maxWidth
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height)
+              height = maxHeight
+            }
+          }
+
+          canvas.width = width
+          canvas.height = height
+
+          const ctx = canvas.getContext('2d')
+          ctx?.drawImage(img, 0, 0, width, height)
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) resolve(blob)
+              else reject(new Error('Canvas compression failed'))
+            },
+            'image/jpeg',
+            quality
+          )
+        }
+        img.onerror = (err) => reject(err)
+      }
+      reader.onerror = (err) => reject(err)
+    })
+  }
+
   async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
     try {
       setUploading(true)
       const file = event.target.files?.[0]
       if (!file) return
 
-      const fileExt = file.name.split('.').pop()
-      // Chemin plat sans sous-dossier — évite les problèmes RLS de dossier
-      const fileName = `avatar_${profile.id}_${Date.now()}.${fileExt}`
+      // Validation de la taille initiale (max 5 Mo)
+      if (file.size > 5 * 1024 * 1024) {
+        setMessage({ type: 'error', text: 'La photo est trop lourde (maximum 5 Mo).' })
+        return
+      }
+
+      // Compression automatique de l'image (max 500x500 px)
+      const compressedBlob = await compressImage(file, 500, 500, 0.85)
+      const fileName = `avatar_${profile.id}_${Date.now()}.jpg`
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, file, { upsert: true })
+        .upload(fileName, compressedBlob, { 
+          upsert: true,
+          contentType: 'image/jpeg'
+        })
 
       if (uploadError) throw uploadError
 
@@ -45,7 +99,7 @@ export default function ProfileForm({ profile }: { profile: any }) {
       if (profile?.is_contact_public) formData.append('is_contact_public', 'on')
       await updateProfile(formData)
       
-      setMessage({ type: 'success', text: 'Photo de profil mise à jour !' })
+      setMessage({ type: 'success', text: 'Photo de profil compressée et mise à jour avec succès !' })
     } catch (error: any) {
       setMessage({ type: 'error', text: 'Echec de l\'upload : ' + error.message })
     } finally {
