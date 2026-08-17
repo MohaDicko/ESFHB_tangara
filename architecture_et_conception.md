@@ -1,75 +1,50 @@
-# Spécifications Techniques : Alumni Tracking System
+# DOSSIER D'ARCHITECTURE TECHNIQUE (DAT)
+## Système d'Information et de Suivi de l'Insertion Professionnelle (SISIP)
+### École de Santé Félix Houphouët-Boigny (ESFHB)
 
-## 1. Vision du Produit
-Un système de gestion centralisé pour maintenir le lien entre l'institution et ses diplômés, tout en fournissant des indicateurs clés sur leur employabilité.
+---
 
-## 2. Fonctionnalités Détaillées
+## 1. Cadre Général et Alignement Stratégique
 
-### A. Espace Alumni (Utilisateur)
-- **Mon Profil :** Mise à jour des coordonnées et de la situation actuelle (En poste, En recherche, Entrepreneur).
-- **Parcours Pro :** Historique chronologique des expériences professionnelles (1-N).
-- **Annuaire :** Recherche simplifiée des autres anciens (optionnel selon confidentialité).
+Le Dossier d'Architecture Technique (DAT) définit la structure logicielle, les mécanismes de sécurité, la gouvernance de données et les normes d'ingénierie applicables à la plateforme **ESFHB Alumni Tracker**.
 
-### B. Espace Administration
-- **Dashboard Analytique :** KPI sur le taux d'insertion, les secteurs d'activité dominants par promotion.
-- **Gestion des Membres :** Validation des comptes, modification ou suppression de profils.
-- **Reporting & Export :** Génération de listes filtrées (Excel/PDF) pour les rapports de performance institutionnelle.
+### 1.1 Exigences Fonctionnelles Métier
+* **Système d'Information Diplômés** : Gestion unifiée des profils académiques et professionnels des étudiants et diplômés.
+* **Analytique de Direction** : Tableaux de bord stratégiques sur le taux d'insertion par filière et promotion.
+* **Portail Entreprises & Recrutement** : Diffusion contrôlée d'offres de santé ciblées.
 
-## 3. Architecture Technique (Optimisée)
-- **Framework :** Next.js 14+ (App Router) pour une navigation fluide et un SEO performant.
-- **Base de Données & API :** Supabase (PostgreSQL + PostgREST) pour une interaction directe et sécurisée.
-- **Sécurité :** Row Level Security (RLS) pour isoler les données personnelles par utilisateur.
-- **UI/UX :** TailwindCSS + Shadcn/UI pour un design moderne, réactif et accessible.
+---
 
-## 4. Schéma de Base de Données
+## 2. Modèle Conceptuel et Relationnel de Données
+
+La base de données relationnelle s'appuie sur le moteur PostgreSQL de Supabase.
+
+### 2.1 Entités Principales
+1. **`profiles`** : Identité, spécialité médicale/paramédicale, coordonnées, statut d'emploi, visibilité des données.
+2. **`experiences`** : Établissements employeurs, intitulés de poste, durées d'exercice, secteurs (Santé publique/privée, ONG, Recherche).
+3. **`user_roles`** : Affectation des autorisations système (`admin`, `alumni`).
+4. **`job_offers`** : Annonces d'emploi, exigences de qualification, contacts recruteurs.
+
+---
+
+## 3. Matrice de Sécurité & ISO 27001 / GDPR / Réglementation Nationale
+
+### 3.1 Partitionnement des Politiques RLS (Row Level Security)
 
 ```sql
--- Table: profiles
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
-  full_name TEXT NOT NULL,
-  promo_year INTEGER NOT NULL,
-  specialty TEXT,
-  phone TEXT,
-  city TEXT,
-  country TEXT,
-  status TEXT DEFAULT 'En recherche', -- En poste, En recherche, Entrepreneur, Étudiant
-  avatar_url TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- RLS Profile Read Isolation
+CREATE POLICY "Strict Authenticated Read Profiles"
+ON public.profiles FOR SELECT USING (auth.role() = 'authenticated');
 
--- Table: experiences
-CREATE TABLE experiences (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  profile_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
-  company_name TEXT NOT NULL,
-  job_title TEXT NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE,
-  is_current BOOLEAN DEFAULT FALSE,
-  sector TEXT, -- IT, Finance, Industrie, Santé, etc.
-  description TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Table: user_roles
-CREATE TABLE user_roles (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL,
-  role TEXT DEFAULT 'alumni' -- admin, alumni
-);
+-- RLS Profile Self Management
+CREATE POLICY "Self Profile Update Only"
+ON public.profiles FOR UPDATE USING (auth.uid() = id);
 ```
 
-## 5. Roadmap de Développement (4 Semaines)
+---
 
-| Semaine | Phase | Livrables |
-| :--- | :--- | :--- |
-| **Semaine 1** | Fondation | Setup Supabase, Authentification (Magic Link/Email), Dashboard de base, Layout. |
-| **Semaine 2** | Profils & Données | Gestion complète du profil alumni, ajout/edition d'expériences, uploads d'images. |
-| **Semaine 3** | Admin & Stats | Interface administrateur, graphiques (Recharts), filtres avancés, exports CSV. |
-| **Semaine 4** | Polissage & Déploiement | Optimisation mobile, PWA, tests de sécurité, déploiement sur Vercel. |
+## 4. Stratégie de Performance et Téléphonie/Mobile (Afrique de l'Ouest)
 
-## 6. Conseils pour le Contexte Africain
-- **Poids des pages :** Minimiser l'usage de bibliothèques lourdes pour accélérer le chargement sur réseau 3G/4G.
-- **Mode hors-ligne :** Mise en cache des données essentielles via `react-query` pour permettre la lecture sans connexion stable.
-- **Simplicité :** Formulaires en étapes (Stepper) pour ne pas décourager les utilisateurs sur mobile.
+1. **Optimisation Réseau 3G/4G** : Chargement ciblé des composants, pas de dépendances réseau inutiles, polices système optimisées.
+2. **Pagination Côté Serveur** : Annuaire paginé par blocs optimisés de 24 éléments pour garantir un temps de réponse sous les 300 ms.
+3. **PWA & Cash** : Support des manifestes web pour l'installation sur smartphone Android/iOS.

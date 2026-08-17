@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { unstable_cache } from 'next/cache'
 import { 
   Search, 
   MapPin, 
@@ -14,6 +13,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
+
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 24
 
@@ -24,7 +24,7 @@ export default async function DirectoryPage({
 }) {
   return (
     <Suspense fallback={<DirectorySkeleton />}>
-       <DirectoryView searchParams={searchParams} />
+      <DirectoryView searchParams={searchParams} />
     </Suspense>
   )
 }
@@ -40,61 +40,64 @@ async function DirectoryView({ searchParams }: { searchParams: Promise<{ q?: str
   const { q, promo, specialty, status } = await searchParams
 
   return (
-    <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-10 pb-24">
-       <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div>
-               <h1 className="text-4xl font-black tracking-tight text-zinc-900 mb-2">Annuaire des Anciens</h1>
-               <p className="text-zinc-500 font-bold">Retrouvez camarades et réseau ESFHB Mali.</p>
-            </div>
-            {isAdmin && (
-              <a 
-                href={`/api/admin/export?${new URLSearchParams([ ...(q ? [['q', q]] : []), ...(status ? [['status', status]] : []), ...(promo ? [['promo', promo]] : []), ...(specialty ? [['specialty', specialty]] : []) ]).toString()}`} 
-                target="_blank"
-                className="flex items-center gap-2 px-6 py-3 bg-brand/10 text-brand rounded-2xl text-sm font-black hover:bg-brand hover:text-white transition-all shrink-0 active:scale-95 shadow-sm border border-brand/20 w-fit"
-              >
-                <Download size={16} /> Exporter Excel
-              </a>
-            )}
+    <div className="p-4 sm:p-8 lg:p-12 max-w-7xl mx-auto space-y-8 pb-24">
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-display font-black text-white">Annuaire des Diplômés</h1>
+            <p className="text-slate-400 text-xs sm:text-sm">Réseau officiel des alumni de l'ESFHB Mali.</p>
           </div>
-          <SearchBar searchParams={searchParams} />
-       </div>
-       <AlumniList searchParams={searchParams} />
+          {isAdmin && (
+            <a 
+              href={`/api/admin/export?${new URLSearchParams([ ...(q ? [['q', q]] : []), ...(status ? [['status', status]] : []), ...(promo ? [['promo', promo]] : []), ...(specialty ? [['specialty', specialty]] : []) ]).toString()}`} 
+              target="_blank"
+              className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 rounded-xl text-xs font-bold transition-all shrink-0 w-fit"
+            >
+              <Download size={14} /> Export CSV
+            </a>
+          )}
+        </div>
+        <SearchBar searchParams={searchParams} />
+      </div>
+      <AlumniList searchParams={searchParams} />
     </div>
   )
 }
 
 async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string, promo?: string, specialty?: string, status?: string }> }) {
   const { q, promo, specialty, status } = await searchParams
-  const promoYears = Array.from({ length: 20 }, (_, i) => 2024 - i)
+  const promoYears = Array.from({ length: 25 }, (_, i) => 2025 - i)
 
   return (
-    <form action="/dashboard/directory" method="GET" className="flex flex-col lg:flex-row gap-4 bg-white p-4 rounded-[32px] border border-zinc-100 shadow-sm relative z-10">
+    <form action="/dashboard/directory" method="GET" className="flex flex-col lg:flex-row gap-3 bg-slate-900/80 p-3 sm:p-4 rounded-2xl border border-white/10 shadow-xl">
       <input type="hidden" name="page" value="1" />
+      
       <div className="flex-1 relative">
-        <Search size={22} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
         <input 
           name="q"
           defaultValue={q}
           placeholder="Rechercher par nom..."
-          className="w-full pl-12 sm:pl-14 pr-4 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base focus:ring-2 focus:ring-brand/10 outline-none"
+          className="w-full pl-11 pr-4 py-3 bg-slate-950/60 border border-white/10 rounded-xl font-medium text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-all"
         />
       </div>
-      <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 sm:gap-4 w-full lg:w-auto">
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex gap-2">
         <select 
           name="promo"
           defaultValue={promo}
-          className="col-span-1 lg:flex-none lg:w-[160px] px-3 sm:px-6 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none truncate"
+          className="px-3 py-3 bg-slate-950/60 border border-white/10 rounded-xl text-xs font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all appearance-none"
         >
           <option value="">Toutes promos</option>
           {promoYears.map(y => <option key={y} value={y}>{y}</option>)}
         </select>
+
         <select 
           name="specialty"
           defaultValue={specialty}
-          className="col-span-1 lg:flex-none lg:w-[180px] px-3 sm:px-6 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none truncate"
+          className="px-3 py-3 bg-slate-950/60 border border-white/10 rounded-xl text-xs font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all appearance-none"
         >
-          <option value="">Toutes spécialités</option>
+          <option value="">Spécialité</option>
           <option value="SMI">SMI</option>
           <option value="SP">SP</option>
           <option value="TLP">TLP</option>
@@ -102,20 +105,20 @@ async function SearchBar({ searchParams }: { searchParams: Promise<{ q?: string,
           <option value="SF">SF</option>
           <option value="IDE">IDE</option>
         </select>
+
         <select 
           name="status"
           defaultValue={status}
-          className="col-span-2 lg:flex-none lg:w-[150px] px-3 sm:px-6 py-4 sm:py-5 bg-zinc-50 border-none rounded-2xl font-bold text-sm sm:text-base text-zinc-500 focus:ring-2 focus:ring-brand/10 outline-none appearance-none truncate"
+          className="col-span-2 sm:col-span-1 px-3 py-3 bg-slate-950/60 border border-white/10 rounded-xl text-xs font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all appearance-none"
         >
           <option value="">Tous statuts</option>
-          <option value="Privé">Privé</option>
-          <option value="Public">Public</option>
-          <option value="Sans emploi">Sans emploi</option>
-          <option value="Bénévolat">Bénévolat</option>
+          <option value="En poste">En poste</option>
+          <option value="En recherche">En recherche</option>
           <option value="Entrepreneur">Entrepreneur</option>
           <option value="Étudiant">Étudiant</option>
         </select>
-        <button type="submit" className="col-span-2 lg:col-span-none lg:w-auto bg-brand text-white px-10 py-4 sm:py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition-all shadow-lg shadow-brand/20 active:scale-95">
+
+        <button type="submit" className="col-span-2 sm:col-span-3 lg:col-span-none bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-xl font-bold text-xs hover:brightness-110 transition-all shadow-md">
           Filtrer
         </button>
       </div>
@@ -131,7 +134,6 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
 
   const supabase = await createClient()
 
-  // ⚠️ Ordre important: filtres D'ABORD, range ENSUITE
   let query = supabase
     .from('profiles')
     .select('id, full_name, promo_year, specialty, city, is_email_public, is_contact_public, avatar_url, status', { count: 'exact' })
@@ -142,21 +144,17 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
   if (specialty && specialty !== '') query = query.eq('specialty', specialty)
   if (status && status !== '') query = query.eq('status', status)
 
-  // Range APRÈS les filtres
   query = query.range(from, to)
 
   const { data: alumni, count } = await query
-
   const totalPages = Math.ceil((count || 0) / PAGE_SIZE)
 
   if (!alumni || alumni.length === 0) {
     return (
-      <div className="p-20 bg-zinc-50 rounded-[48px] text-center space-y-4 border-2 border-dashed border-zinc-200">
-        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-zinc-300 mx-auto shadow-sm">
-          <Search size={32} />
-        </div>
-        <h3 className="text-xl font-bold text-zinc-950">Aucun résultat trouvé</h3>
-        <p className="text-zinc-500 font-medium max-w-xs mx-auto">Essayez d&apos;ajuster vos filtres.</p>
+      <div className="p-12 bg-slate-900/40 border border-white/10 rounded-2xl text-center space-y-3">
+        <Search size={28} className="text-slate-500 mx-auto" />
+        <h3 className="text-base font-bold text-white">Aucun profil ne correspond</h3>
+        <p className="text-slate-400 text-xs">Modifiez vos filtres de recherche.</p>
       </div>
     )
   }
@@ -168,94 +166,74 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
   if (status) params.set('status', status)
 
   return (
-    <div className="space-y-8">
-      {/* Compteur */}
-      <div className="text-sm font-bold text-zinc-400">
-        <span className="text-zinc-900 font-black">{count}</span> alumni trouvés • Page {currentPage} / {totalPages}
+    <div className="space-y-6">
+      <div className="text-xs font-semibold text-slate-400">
+        <span className="text-white font-bold">{count}</span> membres • Page {currentPage} / {totalPages}
       </div>
 
-      {/* Grille */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {alumni.map((person) => (
-          <div key={person.id} className="group p-7 bg-white border border-zinc-100 rounded-[36px] hover:border-brand/20 hover:shadow-2xl hover:shadow-brand/5 transition-all relative overflow-hidden">
-            <div className="flex flex-col items-center text-center space-y-5 relative z-10">
-              <div className="w-20 h-20 bg-zinc-50 rounded-[28px] flex items-center justify-center border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition-transform duration-500">
+          <div key={person.id} className="p-6 bg-slate-900/60 border border-white/10 hover:border-emerald-500/40 rounded-2xl transition-all group flex flex-col justify-between space-y-4">
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0">
                 {person.avatar_url ? (
                   <img src={person.avatar_url} alt={person.full_name} className="w-full h-full object-cover" />
                 ) : (
-                  <User size={36} className="text-zinc-200" />
+                  <User size={28} className="text-slate-500" />
                 )}
               </div>
-              
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-bold text-zinc-950 truncate max-w-full">{person.full_name}</h3>
-                <div className="flex flex-col gap-0.5 items-center">
-                  <span className="text-xs font-black text-brand uppercase tracking-widest flex items-center gap-1">
-                    <GraduationCap size={11} /> Promo {person.promo_year}
-                  </span>
-                  <span className="text-[10px] font-bold text-zinc-400 italic">
-                    {person.specialty || 'Spécialité non définie'}
-                  </span>
+
+              <div>
+                <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-1">{person.full_name}</h3>
+                <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400 mt-1">
+                  <GraduationCap size={13} className="text-emerald-400" />
+                  <span>Promo {person.promo_year}</span>
+                  {person.specialty && <span className="text-slate-500">• {person.specialty}</span>}
                 </div>
               </div>
 
-              <div className="flex items-center gap-5 text-zinc-400 text-xs font-bold pt-2 border-t border-zinc-50 w-full justify-center">
+              {person.status && (
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                  {person.status}
+                </span>
+              )}
+            </div>
+
+            <div className="pt-3 border-t border-white/5 space-y-3">
+              <div className="flex items-center justify-between text-xs text-slate-400">
                 <span className="flex items-center gap-1"><MapPin size={12} /> {person.city || 'Mali'}</span>
-                <div className="flex gap-1.5">
-                  {person.is_email_public && <Mail size={12} className="text-brand" />}
-                  {person.is_contact_public && <Phone size={12} className="text-green-500" />}
+                <div className="flex items-center gap-1.5">
+                  {person.is_email_public && <Mail size={12} className="text-emerald-400" />}
+                  {person.is_contact_public && <Phone size={12} className="text-sky-400" />}
                 </div>
               </div>
 
               <Link 
                 href={`/dashboard/directory/${person.id}`}
-                className="w-full py-3.5 bg-zinc-50 rounded-xl text-zinc-900 text-sm font-bold group-hover:bg-brand group-hover:text-white transition-all flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl bg-white/5 hover:bg-emerald-500 hover:text-white text-slate-200 text-xs font-bold text-center transition-all flex items-center justify-center gap-2"
               >
-                Voir le profil
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                Voir le Profil <ArrowRight size={14} />
               </Link>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 pt-4">
+        <div className="flex items-center justify-center gap-2 pt-4">
           {currentPage > 1 && (
-            <Link 
-              href={`?${params.toString()}&page=${currentPage - 1}`}
-              className="flex items-center gap-2 px-6 py-3 bg-white border border-zinc-200 rounded-2xl font-bold text-sm hover:border-brand/30 transition-all"
-            >
-              <ChevronLeft size={16} /> Précédent
+            <Link href={`?${params.toString()}&page=${currentPage - 1}`} className="p-2.5 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1">
+              <ChevronLeft size={14} /> Précédent
             </Link>
           )}
-          
-          <div className="flex gap-2">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              const p = Math.max(1, Math.min(currentPage - 2, totalPages - 4)) + i
-              return (
-                <Link
-                  key={p}
-                  href={`?${params.toString()}&page=${p}`}
-                  className={`w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center transition-all ${
-                    p === currentPage 
-                      ? 'bg-brand text-white shadow-lg shadow-brand/20' 
-                      : 'bg-white border border-zinc-200 text-zinc-600 hover:border-brand/30'
-                  }`}
-                >
-                  {p}
-                </Link>
-              )
-            })}
+
+          <div className="text-xs font-bold text-slate-400 px-3">
+            {currentPage} / {totalPages}
           </div>
 
           {currentPage < totalPages && (
-            <Link 
-              href={`?${params.toString()}&page=${currentPage + 1}`}
-              className="flex items-center gap-2 px-6 py-3 bg-white border border-zinc-200 rounded-2xl font-bold text-sm hover:border-brand/30 transition-all"
-            >
-              Suivant <ChevronRight size={16} />
+            <Link href={`?${params.toString()}&page=${currentPage + 1}`} className="p-2.5 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1">
+              Suivant <ChevronRight size={14} />
             </Link>
           )}
         </div>
@@ -266,11 +244,11 @@ async function AlumniList({ searchParams }: { searchParams: Promise<{ q?: string
 
 function DirectorySkeleton() {
   return (
-    <div className="space-y-8">
-      <div className="h-6 bg-zinc-100 rounded-xl w-48 animate-pulse" />
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="p-6 space-y-6">
+      <div className="h-10 bg-slate-900/50 rounded-xl w-64 animate-pulse" />
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="h-[300px] bg-zinc-100 rounded-[36px] animate-pulse" />
+          <div key={i} className="h-64 bg-slate-900/50 rounded-2xl animate-pulse" />
         ))}
       </div>
     </div>

@@ -2,13 +2,12 @@ import { cache } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Settings, LogOut, ArrowRight, Zap } from 'lucide-react'
+import { Settings, LogOut, ArrowRight } from 'lucide-react'
 import { logout } from '../auth/actions'
 import SidebarNav from './SidebarNav'
 import MobileMenu from './MobileMenu'
 import BottomNav from './BottomNav'
 
-// Cache les requêtes Supabase pour toute la durée d'un rendu
 const getSessionData = cache(async () => {
   const supabase = await createClient()
   const [{ data: { user } }, { data: roleData }] = await Promise.all([
@@ -28,79 +27,81 @@ export default async function DashboardLayout({
   if (!user) redirect('/login')
 
   return (
-    <div className="flex h-screen h-[100dvh] bg-zinc-50 selection:bg-black selection:text-white">
+    <div className="flex h-screen h-[100dvh] bg-[#080c14] text-slate-100 selection:bg-emerald-500 selection:text-white overflow-hidden">
+      
       {/* Sidebar - Desktop */}
-      <aside className="hidden md:flex w-72 flex-col bg-white border-r border-zinc-200">
-        <div className="p-8">
-          <Link href="/dashboard" className="flex items-center gap-3.5 group">
-            <div className="h-11 w-11 bg-white rounded-2xl shadow-xl shadow-indigo-500/10 flex items-center justify-center border border-zinc-100 p-2">
-               <img src="/logo.jpg" alt="ESFHB Logo" className="h-full w-auto object-contain" />
+      <aside className="hidden md:flex w-72 flex-col bg-[#0b0f17] border-r border-white/10 shrink-0">
+        
+        {/* Brand Logo Header */}
+        <div className="p-6 border-b border-white/10">
+          <Link href="/dashboard" className="flex items-center gap-3 group">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+              <div className="h-full w-full bg-[#0b0f17] rounded-[10px] flex items-center justify-center">
+                <img src="/logo.jpg" alt="ESFHB Logo" className="h-6 w-auto object-contain rounded-md" />
+              </div>
             </div>
             <div>
-               <div className="font-display font-black tracking-tighter text-base leading-none text-zinc-950">ÉCOLE DE SANTÉ</div>
-               <div className="text-[10px] font-black text-brand tracking-widest uppercase mt-0.5">F. Houphouët Boigny</div>
+              <div className="font-display font-black tracking-tight text-base leading-none text-white uppercase">ESFHB</div>
+              <div className="text-[9px] font-bold text-emerald-400 tracking-[0.2em] uppercase mt-1">Alumni Tracker</div>
             </div>
           </Link>
         </div>
 
+        {/* Primary Nav Links */}
         <SidebarNav isAdmin={isAdmin} />
 
-        <div className="p-4 border-t border-zinc-100">
+        {/* Footer Nav Controls */}
+        <div className="p-4 border-t border-white/10 space-y-3">
           <nav className="space-y-1">
             <Link 
               href="/dashboard/settings"
-              className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-zinc-500 hover:bg-zinc-100 hover:text-black rounded-2xl transition-all group"
+              className="flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all group"
             >
-              <Settings size={20} className="text-zinc-400 group-hover:text-black transition-colors" />
+              <Settings size={18} className="text-slate-500 group-hover:text-emerald-400 transition-colors" />
               Paramètres
             </Link>
             <form action={logout}>
               <button 
                 type="submit"
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-50 rounded-2xl transition-colors group"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors group"
               >
-                <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+                <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
                 Déconnexion
               </button>
             </form>
           </nav>
           
-          <Link 
-            href="https://sahelmultiservice.com" 
-            target="_blank" 
-            className="mt-8 flex flex-col items-center gap-2 group relative py-4 px-2 rounded-[32px] hover:bg-zinc-50 transition-all duration-500"
-          >
-            <div className="text-[10px] font-black text-zinc-300 tracking-[0.2em] uppercase">Built with Excellence</div>
-            <div className="flex items-center gap-2 text-[11px] font-black text-zinc-900 group-hover:text-indigo-600 transition-colors">
-               <div className="w-5 h-5 bg-zinc-950 rounded-lg flex items-center justify-center text-[8px] text-white font-black group-hover:bg-indigo-600 transition-colors">SM</div>
-               SAHEL MULTISERVICE
-               <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
-            </div>
-          </Link>
+          <div className="pt-2 text-center text-[10px] font-bold text-slate-500">
+            ESFHB Mali © {new Date().getFullYear()}
+          </div>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden bg-white md:m-3 md:rounded-[48px] md:shadow-2xl md:shadow-zinc-200/50 border border-zinc-100">
-        {/* Mobile Header - Native Style */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-zinc-100 h-16 flex items-center px-6 justify-between shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20">
-              <Zap size={18} fill="white" />
+      {/* Main Content Window */}
+      <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#080c14] relative">
+        
+        {/* Mobile Header Navigation */}
+        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#0b0f17]/90 backdrop-blur-xl border-b border-white/10 h-16 flex items-center px-4 justify-between shadow-lg">
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 p-0.5">
+              <div className="h-full w-full bg-[#0b0f17] rounded-[9px] flex items-center justify-center">
+                <img src="/logo.jpg" alt="ESFHB Logo" className="h-5 w-auto object-contain rounded" />
+              </div>
             </div>
             <div>
-              <div className="font-display font-black tracking-tighter text-base leading-none text-zinc-950 uppercase">ESFHB</div>
-              <div className="text-[8px] font-black text-brand tracking-[0.2em] uppercase mt-0.5">Alumni Med</div>
+              <div className="font-display font-black text-sm text-white uppercase leading-none">ESFHB</div>
+              <div className="text-[8px] font-bold text-emerald-400 tracking-wider uppercase mt-0.5">Alumni Tracker</div>
             </div>
           </div>
           <MobileMenu isAdmin={isAdmin} userEmail={user?.email} logoutAction={logout} />
         </div>
 
+        {/* Scrollable Page Body */}
         <div className="flex-1 overflow-y-auto pt-20 pb-24 md:pt-0 md:pb-0">
           {children}
         </div>
 
-        {/* Mobile Tab Bar */}
+        {/* Mobile Navigation Bar */}
         <BottomNav />
       </main>
     </div>
