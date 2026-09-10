@@ -10,8 +10,6 @@
     "test": "npx tsx scripts/run-tests.mjs"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.48.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.0",
     "lucide-react": "^0.474.0",
